@@ -1,5 +1,5 @@
-# group3Tetris
-## Group 3 Section A
+### group3Tetris
+### Group 3 Section A
 
 ### Group Members
 - Faith Capito
