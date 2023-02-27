@@ -1,4 +1,4 @@
-package TetrisGUI;
+package tetrisgui;
 /**
  * This is the root program driver that opens the GUI.
  *
@@ -12,7 +12,7 @@ public class Application
      *
      * @param args The array of options called by the OS.
      */
-    public static void main(String [] args)
+    public static void main(final String [] theArgs)
     {
         new Window();
     }

@@ -1,19 +1,19 @@
-package TetrisGUI;
+package tetrisgui;
 import java.awt.*;
 import javax.swing.*;
 
 /**
- * This object represents a green panel of the GUI.
+ * This object represents a blue panel of the GUI.
  *
  * @author Avreen Kaur
  * @version Winter 2023
  */
-public class GreenPanel extends JPanel
+public class BluePanel extends JPanel
 {
     /**
      * This represents the color of the panel.
      */
-    private static final Color COLOR = Color.GREEN;
+    private static final Color COLOR = Color.BLUE;
 
     /**
      * This represents the width of the panel.
@@ -23,7 +23,7 @@ public class GreenPanel extends JPanel
     /**
      * This represents the length of the panel.
      */
-    private static final int LENGTH_DIM = 150;
+    private static final int LENGTH_DIM = 100;
 
     /**
      * This is the panel.
@@ -34,7 +34,7 @@ public class GreenPanel extends JPanel
      * This constructor sets the layout, background color, and dimensions
      * of the panel.
      */
-    public GreenPanel()
+    public BluePanel()
     {
         myPanel.setLayout(new BorderLayout());
         myPanel.setBackground(COLOR);

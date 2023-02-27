@@ -1,4 +1,4 @@
-package TetrisGUI;
+package tetrisgui;
 import java.awt.*;
 import javax.swing.*;
 
@@ -8,8 +8,8 @@ import javax.swing.*;
  * @author Avreen Kaur
  * @version Winter 2023
  */
-public class Window extends JFrame {
-
+public class Window extends JFrame
+{
     // FIELDS
 
     /**
@@ -47,7 +47,10 @@ public class Window extends JFrame {
      */
     private JFrame myWindow;
 
-    // private fileMenuPanel myButtonPanel = new fileMenuPanel(); // TEAM A
+    /**
+     * File menu at top of window.
+     */
+    private FileMenu myFileMenu = new FileMenu(); // TEAM A
 
     // CONSTRUCTORS
 
@@ -63,7 +66,7 @@ public class Window extends JFrame {
         myBlue.getPanel().add(myGreen.getPanel(), BorderLayout.NORTH);
         myRed.getPanel().add(myBlue.getPanel(), BorderLayout.EAST);
 
-        // myWindow.add(myButtonPanel, BorderLayout.NORTH); // CODE FROM TEAM A
+        myWindow.add(myFileMenu, BorderLayout.NORTH);
         myWindow.add(myRed.getPanel(), BorderLayout.CENTER);
 
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
