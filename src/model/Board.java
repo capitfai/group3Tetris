@@ -435,6 +435,35 @@ public class Board {
 
     }
 
+    /**
+     * Returns the name of the property when a piece moves.
+     *
+     * @return PROPERTY_PIECE_MOVED The string representation of the piece being moved.
+     */
+    public String getMovePropertyName()
+    {
+        return PROPERTY_PIECE_MOVED;
+    }
+
+    /**
+     * Returns the name of the property when a piece rotates.
+     *
+     * @return PROPERTY_PIECE_ROTATED The string representation of the piece being rotated.
+     */
+    public String getMovePropertyRotated()
+    {
+        return PROPERTY_PIECE_ROTATED;
+    }
+
+    /**
+     * Returns the name of the property when a row(s) are cleared.
+     *
+     * @return PROPERTY_ROW_CLEARED The string representation of the row being cleared property.
+     */
+    public String getMovePropertyClear()
+    {
+        return PROPERTY_ROW_CLEARED;
+    }
     
     // private helper methods
     

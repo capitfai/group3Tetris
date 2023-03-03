@@ -81,6 +81,28 @@ public interface BoardControls {
      */
     void drop();
 
+
+    /**
+     * Returns the name of the property when a piece moves.
+     *
+     * @return PROPERTY_PIECE_MOVED The string representation of the piece being moved.
+     */
+    String getMovePropertyName();
+
+    /**
+     * Returns the name of the property when a piece rotates.
+     *
+     * @return PROPERTY_PIECE_ROTATED The string representation of the piece being rotated.
+     */
+    String getMovePropertyRotated();
+
+    /**
+     * Returns the name of the property when a row(s) are cleared.
+     *
+     * @return PROPERTY_ROW_CLEARED The string representation of the row being cleared property.
+     */
+    String getMovePropertyClear();
+
     /**
      * This method adds the Property Change Listener
      * from the Property Change Support.
