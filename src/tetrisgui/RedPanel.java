@@ -14,7 +14,7 @@ public class RedPanel extends JPanel
     /**
      * This represents the color of the panel.
      */
-    private final static Color COLOR = Color.RED;
+    private static final Color COLOR = Color.RED;
 
     /**
      * This represents the width of the panel.
