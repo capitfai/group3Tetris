@@ -1,4 +1,4 @@
-package tetrisgui;
+package view;
 
 import java.awt.*;
 import javax.swing.*;

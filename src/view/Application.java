@@ -1,4 +1,7 @@
-package tetrisgui;
+package view;
+
+import model.Board;
+
 /**
  * This is the root program driver that opens the GUI.
  *
@@ -19,7 +22,7 @@ public final class Application
      */
     public static void main(final String [] theArgs)
     {
-        new Window();
+        new Window(new Board());
     }
 
 }
