@@ -16,14 +16,14 @@ public interface BoardControls {
      *
      * @return Width of the board.
      */
-     int getWidth();
+    int getWidth();
 
     /**
      * Get the height of the board.
      *
      * @return Height of the board.
      */
-     int getHeight();
+    int getHeight();
 
     /**
      * Resets the board for a new game.
@@ -37,7 +37,7 @@ public interface BoardControls {
      *
      * @param thePieces the List of non random TetrisPieces.
      */
-     void setPieceSequence(final List<TetrisPiece> thePieces);
+    void setPieceSequence(List<TetrisPiece> thePieces);
 
     /**
      * Advances the board by one 'step'.
@@ -47,7 +47,7 @@ public interface BoardControls {
      * - freezing the current piece if appropriate
      * - clearing full lines as needed
      */
-     void step();
+    void step();
 
     /**
      * Try to move the movable piece down.
@@ -99,9 +99,17 @@ public interface BoardControls {
     /**
      * Returns the name of the property when a row(s) are cleared.
      *
-     * @return PROPERTY_ROW_CLEARED The string representation of the row being cleared property.
+     * @return PROPERTY_ROW_CLEARED The string representation
+     *         of the row being cleared property.
      */
     String getMovePropertyClear();
+
+    /**
+     * Returns the name of the property when a piece changes.
+     *
+     * @return PROPERTY_PIECE_CHANGE The string representation of the piece being changed.
+     */
+    String getMovePropertyPieceChange();
 
     /**
      * This method adds the Property Change Listener
@@ -120,21 +128,21 @@ public interface BoardControls {
     void removePropertyChangeListener(PropertyChangeListener theListener);
 
     /**
-     * This method adds a Property Change Listener to the Property Change Support
+     * This method adds a Property Change Listener to the Property Change Support.
      *
      * @param thePropertyName The name of the Property Change Listener being added.
      * @param theListener The Property Change Listener that is added.
      */
-     void addPropertyChangeListener(final String thePropertyName,
-                                          final PropertyChangeListener theListener);
+    void addPropertyChangeListener(String thePropertyName,
+                                           PropertyChangeListener theListener);
 
     /**
-     * This method removes a Property Change Listener to the Property Change Support
+     * This method removes a Property Change Listener to the Property Change Support.
      *
      * @param thePropertyName The name of the Property Change Listener being removed.
      * @param theListener The Property Change Listener that is removed.
      */
-    void removePropertyChangeListener(final String thePropertyName,
-                                             final PropertyChangeListener theListener);
+    void removePropertyChangeListener(String thePropertyName,
+                                              PropertyChangeListener theListener);
 
 }
