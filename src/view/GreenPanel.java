@@ -1,6 +1,8 @@
-package tetrisgui;
+package view;
+
 import java.awt.*;
 import javax.swing.*;
+import model.Board;
 
 /**
  * This object represents a green panel of the GUI.
@@ -31,6 +33,12 @@ public class GreenPanel extends JPanel
     private JPanel myPanel = new JPanel();
 
     /**
+     * This object is a board object from the model package.
+     */
+    private Board myBoard = new Board();
+
+
+    /**
      * This constructor sets the layout, background color, and dimensions
      * of the panel.
      */
@@ -49,6 +57,17 @@ public class GreenPanel extends JPanel
     public JPanel getPanel()
     {
         return myPanel;
+    }
+
+    /**
+     * This method adds a JPanel to the JPanel of
+     * the Green Panel object.
+     *
+     * @param thePanel The panel being added to Green Panel Object
+     */
+    public void add(final JPanel thePanel)
+    {
+        myPanel.add(thePanel);
     }
 
 }

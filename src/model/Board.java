@@ -6,10 +6,13 @@
 
 package model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import model.wallkicks.WallKick;
+
 
 /**
  * Represents a Tetris board. Board objects communicate with clients via Observer pattern. 
@@ -32,7 +35,7 @@ import model.wallkicks.WallKick;
  * @author Alan Fowler
  * @version 1.3
  */
-public class Board {
+public class Board implements BoardControls {
 
     // Class constants
     
@@ -46,6 +49,25 @@ public class Board {
      */
     private static final int DEFAULT_HEIGHT = 20;
 
+    /**
+     * Piece successfully moved.
+     */
+    private static final String PROPERTY_PIECE_MOVED = "Piece was able to move!";
+
+    /**
+     * Piece successfully rotated.
+     */
+    private static final String PROPERTY_PIECE_ROTATED = "Piece was able to rotate!";
+
+    /**
+     * Row was successfully cleared.
+     */
+    private static final String PROPERTY_ROW_CLEARED = "Row was cleared!";
+
+    /**
+     * Board has been changed.
+     */
+    private static final String PROPERTY_PIECE_CHANGE = "New piece incoming!!";
     
     // Instance fields
     
@@ -95,7 +117,12 @@ public class Board {
      * down movement in the drop.
      */
     private boolean myDrop;
-    
+
+    /**
+     * This is a Property Change Support object.
+     */
+    private PropertyChangeSupport myPcs;
+
     // Constructors
 
     /**
@@ -120,6 +147,7 @@ public class Board {
          
         myNonRandomPieces = new ArrayList<TetrisPiece>();
         mySequenceIndex = 0;
+        myPcs = new PropertyChangeSupport(this);
         
         /*  myNextPiece and myCurrentPiece
          *  are initialized by the newGame() method.
@@ -146,8 +174,6 @@ public class Board {
     public int getHeight() {
         return myHeight;
     }
-    
-
 
     /**
      * Resets the board for a new game.
@@ -165,7 +191,7 @@ public class Board {
         myGameOver = false;
         myCurrentPiece = nextMovablePiece(true);
         myDrop = false;
-        
+
         // TODO Publish Update!
     }
 
@@ -197,30 +223,59 @@ public class Board {
          */
         down();
     }
-    
+
     /**
      * Try to move the movable piece down.
      * Freeze the Piece in position if down tries to move into an illegal state.
      * Clear full lines.
      */
     public void down() {
+
         if (!move(myCurrentPiece.down())) {
             // the piece froze, so clear lines and update current piece
             addPieceToBoardData(myFrozenBlocks, myCurrentPiece);
             checkRows();
+
+            myCurrentPiece = nextMovablePiece(true);
+            myPcs.firePropertyChange(PROPERTY_PIECE_CHANGE, null, myCurrentPiece);
+
             if (!myGameOver) {
-                myCurrentPiece = nextMovablePiece(false);
+
+                // myDrop is false, next piece is set
+
+                final Point oldPosition = myCurrentPiece.getPosition();
+                myCurrentPiece = myCurrentPiece.down();
+                final Point newPosition = myCurrentPiece.getPosition();
+
+                myPcs.firePropertyChange(PROPERTY_PIECE_MOVED, oldPosition, newPosition);
+
+                // rows have been checked or cleared,
+                // those rows have moved down?
+                // game keeps going, start new piece?
             }
-            // TODO Publish Update!
+
+        }
+
+        if (move(myCurrentPiece.down())) {
+
+            final Point oldPosition = myCurrentPiece.getPosition();
+            myCurrentPiece = myCurrentPiece.down();
+            final Point newPosition = myCurrentPiece.getPosition();
+
+            myPcs.firePropertyChange(PROPERTY_PIECE_MOVED, oldPosition, newPosition);
         }
     }
-
     /**
      * Try to move the movable piece left.
      */
     public void left() {
-        if (myCurrentPiece != null) {
-            move(myCurrentPiece.left());
+        if (myCurrentPiece != null && move(myCurrentPiece.left())) {
+
+            final Point oldPosition = myCurrentPiece.getPosition();
+            myCurrentPiece = myCurrentPiece.left();
+            final Point newPosition = myCurrentPiece.getPosition();
+
+            myPcs.firePropertyChange(PROPERTY_PIECE_MOVED, oldPosition, newPosition);
         }
     }
 
@@ -228,8 +283,14 @@ public class Board {
      * Try to move the movable piece right.
      */
     public void right() {
-        if (myCurrentPiece != null) {
-            move(myCurrentPiece.right());
+        if (myCurrentPiece != null && move(myCurrentPiece.right())) {
+
+            final Point oldPosition = myCurrentPiece.getPosition();
+            myCurrentPiece = myCurrentPiece.right();
+            final Point newPosition = myCurrentPiece.getPosition();
+
+            myPcs.firePropertyChange(PROPERTY_PIECE_MOVED, oldPosition, newPosition);
+
         }
     }
 
@@ -238,8 +299,16 @@ public class Board {
      */
     public void rotateCW() {
         if (myCurrentPiece != null) {
-            if (myCurrentPiece.getTetrisPiece() == TetrisPiece.O) {
-                move(myCurrentPiece.rotateCW());
+            if (myCurrentPiece.getTetrisPiece() == TetrisPiece.O
+                    && move(myCurrentPiece.rotateCW())) {
+
+                final Point oldRotation = myCurrentPiece.getPosition();
+                myCurrentPiece = myCurrentPiece.rotateCW();
+                final Point newRotation = myCurrentPiece.getPosition();
+
+                myPcs.firePropertyChange(PROPERTY_PIECE_ROTATED, oldRotation, newRotation);
+
+
             } else {
                 final MovableTetrisPiece cwPiece = myCurrentPiece.rotateCW();
                 final Point[] offsets = WallKick.getWallKicks(cwPiece.getTetrisPiece(),
@@ -261,8 +330,16 @@ public class Board {
      */
     public void rotateCCW() {
         if (myCurrentPiece != null) {
-            if (myCurrentPiece.getTetrisPiece() == TetrisPiece.O) {
-                move(myCurrentPiece.rotateCCW());
+            if (myCurrentPiece.getTetrisPiece() == TetrisPiece.O
+                    && move(myCurrentPiece.rotateCCW())) {
+
+                final Point oldRotation = myCurrentPiece.getPosition();
+                myCurrentPiece = myCurrentPiece.rotateCCW();
+                final Point newRotation = myCurrentPiece.getPosition();
+
+                myPcs.firePropertyChange(PROPERTY_PIECE_ROTATED, oldRotation, newRotation);
+
+
             } else {
                 final MovableTetrisPiece ccwPiece = myCurrentPiece.rotateCCW();
                 final Point[] offsets = WallKick.getWallKicks(ccwPiece.getTetrisPiece(),
@@ -333,7 +410,91 @@ public class Board {
         return sb.toString();
     }
 
-    
+    /**
+     * This method adds the Property Change Listener
+     * from the Property Change Support.
+     *
+     * @param theListener The Property Change Listener being added.
+     */
+    public void addPropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(theListener);
+    }
+
+    /**
+     * This method removes the Property Change Listener
+     * from the Property Change Support.
+     *
+     * @param theListener The Property Change Listener being removed.
+     */
+    public void removePropertyChangeListener(final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(theListener);
+    }
+
+    /**
+     * This method adds a Property Change Listener to the Property Change Support.
+     *
+     * @param thePropertyName The name of the Property Change Listener being added.
+     * @param theListener The Property Change Listener that is added.
+     */
+    public void addPropertyChangeListener(final String thePropertyName,
+                                          final PropertyChangeListener theListener) {
+        myPcs.addPropertyChangeListener(thePropertyName, theListener);
+
+    }
+
+    /**
+     * This method removes a Property Change Listener to the Property Change Support.
+     *
+     * @param thePropertyName The name of the Property Change Listener being removed.
+     * @param theListener The Property Change Listener that is removed.
+     */
+    public void removePropertyChangeListener(final String thePropertyName,
+                                             final PropertyChangeListener theListener) {
+        myPcs.removePropertyChangeListener(thePropertyName, theListener);
+
+    }
+
+    /**
+     * Returns the name of the property when a piece moves.
+     *
+     * @return PROPERTY_PIECE_MOVED The string representation of the piece being moved.
+     */
+    public String getMovePropertyName()
+    {
+        return PROPERTY_PIECE_MOVED;
+    }
+
+    /**
+     * Returns the name of the property when a piece rotates.
+     *
+     * @return PROPERTY_PIECE_ROTATED The string representation of the piece being rotated.
+     */
+    public String getMovePropertyRotated()
+    {
+        return PROPERTY_PIECE_ROTATED;
+    }
+
+    /**
+     * Returns the name of the property when a row(s) are cleared.
+     *
+     * @return PROPERTY_ROW_CLEARED The string representation
+     *         of the row being cleared property.
+     */
+    public String getMovePropertyClear()
+    {
+        return PROPERTY_ROW_CLEARED;
+    }
+
+    /**
+     * Returns the name of the property when a piece changes.
+     *
+     * @return PROPERTY_PIECE_CHANGE The string representation of the piece being changed.
+     */
+    public String getMovePropertyPieceChange()
+    {
+        return PROPERTY_PIECE_CHANGE;
+    }
+
     // private helper methods
     
     /**
@@ -349,7 +510,7 @@ public class Board {
             myCurrentPiece = theMovedPiece;
             result = true;
             if (!myDrop) {
-                // TODO Publish Update!
+                myCurrentPiece = nextMovablePiece(true);
             }
         }
         return result;
@@ -413,12 +574,15 @@ public class Board {
              // TODO Publish Update!
             }
         }
+
         // loop through list backwards removing items by index
         if (!completeRows.isEmpty()) {
             for (int i = completeRows.size() - 1; i >= 0; i--) {
                 final Block[] row = myFrozenBlocks.get(completeRows.get(i));
                 myFrozenBlocks.remove(row);
                 myFrozenBlocks.add(new Block[myWidth]);
+
+                myPcs.firePropertyChange(PROPERTY_ROW_CLEARED, row, myFrozenBlocks);
             }
         }
     }
@@ -540,9 +704,9 @@ public class Board {
         if (share && !myGameOver) {
             // TODO Publish Update!
         }
-    }    
+    }
 
-    
+
     // Inner classes
 
     /**

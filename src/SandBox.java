@@ -8,12 +8,12 @@ public final class SandBox {
 
     public static void main(final String[] theArgs) {
         final Board b = new Board();
+
         b.newGame();
         System.out.println(b);
-
         b.step();
         System.out.println(b);
-        b.rotateCW();
+        b.step();
         System.out.println(b);
         b.rotateCW();
         System.out.println(b);
@@ -23,7 +23,6 @@ public final class SandBox {
         System.out.println(b);
         b.drop();
         System.out.println(b);
-
     }
 
 }
