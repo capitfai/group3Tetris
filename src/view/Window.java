@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import model.BoardControls;
+import controls.BoardControls;
 
 /**
  * This object represents the frame of the GUI.
@@ -75,18 +75,6 @@ public class Window extends JFrame
      */
     private final BoardControls myBoard;
 
-    /**
-     * This is the drawBoardPanel object which represents the board
-     * of the game as a drawing in Red Panel.
-     */
-    private final DrawBoardPanel myBoardPanel = new DrawBoardPanel();
-
-    /**
-     * This is the drawPiecePanel object which represents the next piece
-     * of the game as a drawing in Green Panel.
-     */
-    private final DrawPiecePanel myPiecePanel = new DrawPiecePanel();
-
     // CONSTRUCTORS
 
     /**
@@ -102,14 +90,10 @@ public class Window extends JFrame
         myWindow = new JFrame(NAME);
         myWindow.setLayout(new BorderLayout());
 
-        myRed.add(myBoardPanel);
-        myGreen.add(myPiecePanel);
-
-        myBlue.getPanel().add(myGreen.getPanel(), BorderLayout.NORTH);
-        myRed.getPanel().add(myBlue.getPanel(), BorderLayout.EAST);
-
         myWindow.add(myFileMenu, BorderLayout.NORTH);
-        myWindow.add(myRed.getPanel(), BorderLayout.CENTER);
+        myBlue.add(myGreen, BorderLayout.NORTH);
+        myRed.add(myBlue, BorderLayout.EAST);
+        myWindow.add(myRed, BorderLayout.CENTER);
 
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
@@ -122,52 +106,46 @@ public class Window extends JFrame
             @Override
             public void actionPerformed(final ActionEvent theEve)
             {
-                myBoard.step();
+                if(!myBoard.getGameStatus()) {
+                    myBoard.step();
+                }
             }
         });
 
-        myBoard.addPropertyChangeListener(myBoardPanel);
-        myBoard.addPropertyChangeListener(myPiecePanel);
+        myBoard.addPropertyChangeListener(myRed);
+        myBoard.addPropertyChangeListener(myGreen);
+        myBoard.addPropertyChangeListener(myBlue);
 
         myWindow.addKeyListener(new BoardKeyListener());
         myWindow.setFocusable(true);
         myWindow.requestFocus();
+
+        myTimer.start();
 
     }
 
     class BoardKeyListener extends KeyAdapter
     {
         @Override
-        public void keyPressed(final KeyEvent theEvent)
-        {
-            if (theEvent.getKeyCode() == KeyEvent.VK_A
-                    || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
-            {
-                myBoard.left();
-            }
-
-            else if (theEvent.getKeyCode() == KeyEvent.VK_D
-                    || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
-            {
-                myBoard.right();
-            }
-
-            else if (theEvent.getKeyCode() == KeyEvent.VK_W
-                    || theEvent.getKeyCode() == KeyEvent.VK_UP)
-            {
-                myBoard.rotateCW();
-            }
-
-            else if (theEvent.getKeyCode() == KeyEvent.VK_S
-                    || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
-            {
-                myBoard.down();
-            }
-
-            else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
-            {
-                myBoard.drop();
+        public void keyPressed(final KeyEvent theEvent) {
+            if (!myBoard.getGameStatus()) {
+                if (theEvent.getKeyCode() == KeyEvent.VK_A
+                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+                    myBoard.left();
+                } else if (theEvent.getKeyCode() == KeyEvent.VK_D
+                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    myBoard.right();
+                } else if (theEvent.getKeyCode() == KeyEvent.VK_W
+                        || theEvent.getKeyCode() == KeyEvent.VK_UP) {
+                    myBoard.rotateCW();
+                } else if (theEvent.getKeyCode() == KeyEvent.VK_S
+                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN) {
+                    myBoard.down();
+                } else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                    myBoard.drop();
+                }
             }
         }
     }
+
 }

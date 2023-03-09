@@ -187,7 +187,7 @@ public final class MovableTetrisPiece {
      */
     protected MovableTetrisPiece down() {
         return new MovableTetrisPiece(myTetrisPiece,
-                                      myPosition.transform(0, -1),
+                                      myPosition.transform(0, 1), // 1 instead of - 1 so that it moves down one instead of up 1
                                       myRotation);
     }
     

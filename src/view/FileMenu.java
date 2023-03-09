@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import model.Board;
 
 /**
  * This is program is a JMenuBar containing a file menu for a tetris game.
@@ -134,8 +135,8 @@ public class FileMenu extends JMenuBar {
             @Override
             public void actionPerformed(final ActionEvent theE) {
 
-                if (myGameState) { // game is not in progress
-                    // start new game
+                if (myGameState) {
+
                 } else {
                     //Disable myNewGame JMenuItem, if game is already in progress
                     myNewGame.setEnabled(false);
