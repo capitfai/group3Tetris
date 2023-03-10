@@ -221,17 +221,6 @@ public class Board implements BoardControls {
     }
 
     /**
-     * Keeps track of whether the game is in progress or over.
-     *
-     * @return True if the game has ended, false if the game is in progress.
-     */
-    public boolean getGameStatus()
-    {
-        return myGameOver;
-    }
-
-
-    /**
      * Try to move the movable piece down.
      * Freeze the Piece in position if down tries to move into an illegal state.
      * Clear full lines.
@@ -240,7 +229,8 @@ public class Board implements BoardControls {
 
         if (!move(myCurrentPiece.down())) {
 
-            myPcs.firePropertyChange(PROPERTY_FREEZE, myCurrentPiece, myCurrentPiece.getPosition());
+            Point newPosition = myCurrentPiece.getPosition();
+            myPcs.firePropertyChange(PROPERTY_FREEZE, myCurrentPiece, newPosition);
             // the piece froze, so clear lines and update current piece
             addPieceToBoardData(myFrozenBlocks, myCurrentPiece);
             checkRows();
@@ -348,8 +338,10 @@ public class Board implements BoardControls {
             while (isPieceLegal(myCurrentPiece.down())) {
                 down();  // move down as far as possible
             }
-            myDrop = false;
+
             down();  // move down one more time to freeze in place
+            myDrop = false;
+
         }
     }
 
@@ -493,10 +485,7 @@ public class Board implements BoardControls {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-
-                int newSize = completeRows.size();
-                myPcs.firePropertyChange(PROPERTY_CLEAR, myCurrentPiece, newSize);
-
+                myPcs.firePropertyChange(PROPERTY_CLEAR, myCurrentPiece, completeRows);
                 // TODO Publish Update!
             }
         }

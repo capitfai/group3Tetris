@@ -1,18 +1,19 @@
 package view;
 
 import java.awt.*;
-import java.util.Map;
+import java.util.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 import javax.swing.*;
 import model.Board;
 import model.Point;
 import model.TetrisPiece;
 import model.MovableTetrisPiece;
-import java.util.TreeMap;
 import model.Rotation;
+import model.Block;
 
 /**
  * This object represents a red panel of the GUI.
@@ -45,11 +46,13 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
     private TetrisPiece myTetrisPiece;
 
-    Rectangle2D[] myGamePieces;
+    private Rectangle2D[] myGamePieces;
 
-    Map<String, Color> myPieceToColor;
+    private Map<String, Color> myPieceToColor;
 
-    String [][] myGrid;
+    private String [][] myGrid;
+
+    private boolean pressToStart;
 
 
     /**
@@ -79,6 +82,8 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
             myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
         }
 
+        pressToStart = true;
+
     }
 
     @Override
@@ -91,6 +96,35 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
+        if(pressToStart)
+        {
+            g2d.setPaint(new Color(90,50,90));
+            g2d.fillRect(25,25, myBoard.getWidth() * 25 - 50, myBoard.getHeight() * 25 - 50);
+
+            g2d.setPaint(Color.BLACK);
+            g2d.setFont(new Font("Arial", Font.BOLD, 20));
+            g2d.drawString("Press 1 to start!", 50, 250);
+
+            g2d.setPaint(Color.BLACK);
+            g2d.setFont(new Font("Arial", Font.ITALIC, 15));
+            g2d.drawString("SCORING GUIDE:", 50, 275);
+            g2d.drawString("+4 points when a piece", 50, 295);
+            g2d.drawString("freezes in place.", 50, 315);
+            g2d.drawString("+1 level (n) each 5 lines ", 50, 335);
+            g2d.drawString("cleared.", 50,355);
+            g2d.drawString("+  40(n) = 1 line", 50,375);
+            g2d.drawString("+ 100(n) = 2 lines", 50,395);
+            g2d.drawString("+ 300(n) = 3 lines", 50,415);
+            g2d.drawString("+1200(n) = 4 lines", 50,435);
+
+
+
+
+            pressToStart = false;
+        }
+
+        else
+        {
         for (int row = 0; row < myBoard.getHeight(); row++) {
             for (int col = 0; col < myBoard.getWidth(); col++) {
 
@@ -98,10 +132,9 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
                 g2d.draw(new Rectangle2D.Double(col * 25, row * 25,
                         25, 25));
 
-                if(myGrid[col][row] != null)
-                {
+                if (myGrid[col][row] != null) {
                     g2d.setPaint(myPieceToColor.get(myGrid[col][row]));
-                    g2d.fillRect(col * 25, row * 25 , 25, 25);
+                    g2d.fillRect(col * 25, row * 25, 25, 25);
                 }
             }
 
@@ -112,15 +145,13 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
                 }
             }
         }
+        }
 
         if(gameOver)
         {
             g2d.setPaint(Color.BLACK);
             g2d.setFont(new Font("Arial", Font.BOLD, 30));
             g2d.drawString("GAME OVER!", 25, 250);
-
-            // stop timer?
-            // make game status not in progress?
         }
     }
 
@@ -132,56 +163,87 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
             MovableTetrisPiece temp = (MovableTetrisPiece) theEvt.getOldValue();
             Point myP = (Point) theEvt.getNewValue();
 
-            System.out.println(myP);
-
             myTetrisPiece = temp.getTetrisPiece();
-            System.out.println(myTetrisPiece.toString());
             Point[] myBlock = myTetrisPiece.getPoints();
 
+            int[][] myCoords = myTetrisPiece.getPointsByRotation(temp.getRotation());
+
             for (int i = 0; i < 4; i++) {
-                // shifts each block in the TetrisPiece to new position
-                myGamePieces[i].setFrame(((myBlock[i].x() + myP.x())) * 25, (myBlock[i].y() + myP.y()) * 25, 25, 25);
+                // shifts each block in the TetrisPiece to new position;
+                // myP.x() == myCoords[i][0]
+                // myP.y() == myCoords[i][1]
+                myGamePieces[i].setFrame((( myP.x() + myCoords[i][0])) * 25, ( myP.y() + myCoords[i][1]) * 25, 25, 25);
             }
         }
 
         else if(theEvt.getPropertyName().equals(myBoard.PROPERTY_ROTATED))
         {
-            System.out.println("WORK.... PLEASE");
-
             MovableTetrisPiece temp = (MovableTetrisPiece) theEvt.getOldValue();
-            Rotation myRotation = (Rotation) theEvt.getNewValue();
 
-            System.out.println(myRotation);
+            myTetrisPiece = temp.getTetrisPiece();
+            Rotation myRotation = (Rotation) theEvt.getNewValue();
+            Point myPoint = temp.getPosition();
+            int[][] myCoords = myTetrisPiece.getPointsByRotation(temp.getRotation());
+
+
+            for (int i = 0; i < 4; i++) {
+                myGamePieces[i].setFrame((( myPoint.x() + myCoords[i][0])) * 25, ( myPoint.y() + myCoords[i][1]) * 25, 25, 25);
+            }
+
+
         }
 
         else if(theEvt.getPropertyName().equals(myBoard.PROPERTY_FREEZE))
         {
             MovableTetrisPiece myTemp = (MovableTetrisPiece) theEvt.getOldValue();
-            TetrisPiece myTetrisPiece = myTemp.getTetrisPiece();
+
+            myTetrisPiece = myTemp.getTetrisPiece();
             Point myPoint = (Point) theEvt.getNewValue();
             Point[] myBlock = myTetrisPiece.getPoints();
 
+            int[][] myCoords = myTetrisPiece.getPointsByRotation(myTemp.getRotation());
+
             for(int i = 0; i < 4; i++)
             {
-                if(myPoint.y() + myBlock[i].y() == -1)
-                {
-                    myGrid[myPoint.x() + myBlock[i].x()][0] = myTetrisPiece.name();
-                    // so that the last piece before the game is over is added to the grid
+                if(myPoint.y() + myBlock[i].y() != -1) {
+                    // adding to grid the frozen block so that the user can see it in the GUI
+                    myGrid[myPoint.x() + myCoords[i][0]][myPoint.y() + myCoords[i][1]] = myTetrisPiece.name();
                 }
 
-                else
-                {
-                    myGrid[myPoint.x() + myBlock[i].x()][myPoint.y() + myBlock[i].y()] = myTetrisPiece.name();
-                    // adding to grid the frozen block so that the user can see it in the GUI
-                }
+                // else do nothing, don't draw frozen blocks that are out of GUI
             }
         }
 
         else if(theEvt.getPropertyName().equals(myBoard.PROPERTY_CLEAR))
         {
-            MovableTetrisPiece myTemp = (MovableTetrisPiece) theEvt.getOldValue();
-            myTetrisPiece = myTemp.getTetrisPiece();
-            int rowChange = (int) theEvt.getNewValue();
+//            MovableTetrisPiece myTemp = (MovableTetrisPiece) theEvt.getOldValue();
+//            myTetrisPiece = myTemp.getTetrisPiece();
+//
+//            int max = 0;
+//
+//            final List<Integer> completeRows = (List<Integer>) theEvt.getNewValue();
+//
+//            for(int row = 0; row < completeRows.size(); row++)
+//            {
+//                for(int col = 0; col < myBoard.getWidth(); col++)
+//                {
+//                    System.out.println(completeRows.get(row));
+//
+//                    if(max < completeRows.get(row))
+//                    {
+//                        max = completeRows.get(row);
+//                    }
+//                    myGrid[col][completeRows.get(row)] = null;
+//                }
+//            }
+//
+//            for(int row = max; row > 0; row--)
+//            {
+//                for(int col = 0; col < 10; col++)
+//                {
+//                    myGrid[col][row] = myGrid[col][row-1];
+//                }
+//            }
 
             int count = 0;
 
@@ -197,18 +259,19 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
                 if(count >= myBoard.getWidth())
                 {
-                    for(int k = 0; k < 10; k++)
+                    for(int i = row; i > 0; i--)
                     {
-                        myGrid[k][row] = null; // it does??? CLEAR
+                        for(int j = 0; j < 10; j++)
+                        {
+                            myGrid[j][i] = myGrid[j][i-1];
+                            myGrid[j][i - 1] = null;
+
+                        }
                     }
-
+                    // now bring all rows above down by amount ????
                 }
-
                 count = 0; // reset count in order to check next row
             }
-
-            // now make sure all rows above the cleared rows drop by 1
-
         }
 
         else if(theEvt.getPropertyName().equals(myBoard.PROPERTY_OVER))
@@ -219,4 +282,18 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
         repaint();
 
     }
+
+
+    private void printMe(String [][] theGrid)
+    {
+        for(int row = 0; row < 20; row++)
+        {
+            for(int col = 0; col < 10; col++)
+            {
+                System.out.print(theGrid[col][row] + " ");
+            }
+            System.out.println();
+        }
+    }
+
 }

@@ -23,7 +23,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * This represents the color of the panel.
      */
-    private static final Color COLOR = new Color(200,2,100);
+    private static final Color COLOR = new Color(190,120,150);
 
     /**
      * This represents the width of the panel.
@@ -106,7 +106,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
 
         g2d.setPaint(Color.BLACK);
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
-        g2d.drawString("Next Piece!", 25, 25);
+        g2d.drawString("Next Piece!", 20, 25);
 
         if(myTetrisPiece != null) {
             for (int i = 0; i < 4; i++) {

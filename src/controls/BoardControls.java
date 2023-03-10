@@ -85,13 +85,6 @@ public interface BoardControls {
     void drop();
 
     /**
-     * Keeps track of whether the game is in progress or over.
-     *
-     * @return True if the game has ended, false if the game is in progress.
-     */
-    boolean getGameStatus();
-
-    /**
      * This method adds the Property Change Listener
      * from the Property Change Support.
      *

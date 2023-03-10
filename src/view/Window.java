@@ -16,8 +16,7 @@ import controls.BoardControls;
  *
  * @version Winter 2023
  */
-public class Window extends JFrame
-{
+public class Window extends JFrame {
     // FIELDS
 
     /**
@@ -68,12 +67,22 @@ public class Window extends JFrame
     /**
      * File menu at top of window.
      */
-    private FileMenu myFileMenu = new FileMenu();
+    private FileMenu myFileMenu;
 
     /**
      * This represents a Board Object of the model package.
      */
     private final BoardControls myBoard;
+
+    /**
+     * Keeps track of whether the game has been paused or not.
+     */
+    private boolean gameInProgress;
+
+    /**
+     * Keeps track of whether the game can be started again or not.
+     */
+    private boolean pressToStart;
 
     // CONSTRUCTORS
 
@@ -81,11 +90,15 @@ public class Window extends JFrame
      * This constructor sets the name, layout, and visibility of the frame.
      * It also adds the 3 (red, blue, and green) panels to the frame.
      */
-    public Window(final BoardControls theBoard)
-    {
+    public Window(final BoardControls theBoard) {
         super();
         myBoard = theBoard;
         myBoard.newGame();
+
+        myFileMenu = new FileMenu();
+
+        gameInProgress = false;
+        pressToStart = true;
 
         myWindow = new JFrame(NAME);
         myWindow.setLayout(new BorderLayout());
@@ -97,16 +110,14 @@ public class Window extends JFrame
 
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
-        // myWindow.setResizable(false);
+        myWindow.setResizable(false);
         myWindow.setVisible(true);
 
         myTimer = new Timer(TIMER_DELAY, null);
-        myTimer.addActionListener(new ActionListener()
-        {
+        myTimer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(final ActionEvent theEve)
-            {
-                if(!myBoard.getGameStatus()) {
+            public void actionPerformed(final ActionEvent theEve) {
+                if (gameInProgress) {
                     myBoard.step();
                 }
             }
@@ -115,20 +126,42 @@ public class Window extends JFrame
         myBoard.addPropertyChangeListener(myRed);
         myBoard.addPropertyChangeListener(myGreen);
         myBoard.addPropertyChangeListener(myBlue);
+        myBoard.addPropertyChangeListener(myFileMenu);
 
         myWindow.addKeyListener(new BoardKeyListener());
         myWindow.setFocusable(true);
         myWindow.requestFocus();
 
-        myTimer.start();
-
     }
 
-    class BoardKeyListener extends KeyAdapter
-    {
+    class BoardKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(final KeyEvent theEvent) {
-            if (!myBoard.getGameStatus()) {
+
+            if(pressToStart) {
+                if (theEvent.getKeyCode() == KeyEvent.VK_1) // start the game
+                {
+                    myTimer.start();
+                    gameInProgress = true; // game has started, control the pieces
+                    pressToStart = false;
+                }
+            }
+
+            else if (theEvent.getKeyCode() == KeyEvent.VK_P) // pause the game
+            {
+                if (myTimer.isRunning()) {
+                    myTimer.stop();
+                    gameInProgress = false; // no controlling the piece
+                }
+            } else if (theEvent.getKeyCode() == KeyEvent.VK_U) // unpause the game
+            {
+                if (!myTimer.isRunning()) {
+                    myTimer.start();
+                    gameInProgress = true; // can control the piece
+                }
+            }
+
+            if (gameInProgress) {
                 if (theEvent.getKeyCode() == KeyEvent.VK_A
                         || theEvent.getKeyCode() == KeyEvent.VK_LEFT) {
                     myBoard.left();
@@ -147,5 +180,4 @@ public class Window extends JFrame
             }
         }
     }
-
 }
