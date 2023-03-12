@@ -403,6 +403,17 @@ public class Board implements BoardControls {
         return sb.toString();
     }
 
+    /**
+     * This method sets the status of the game to false,
+     * and notifies that the game status is over.
+     *
+     */
+    public void setGameOver()
+    {
+        myGameOver = true;
+        myPcs.firePropertyChange(PROPERTY_OVER, myCurrentPiece, myGameOver);
+    }
+
 
     // private helper methods
 

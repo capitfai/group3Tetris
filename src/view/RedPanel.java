@@ -20,7 +20,6 @@ import model.MovableTetrisPiece;
 import model.Rotation;
 import model.Block;
 
-import java.util.Collections;
 
 /**
  * This object represents a red panel of the GUI.
@@ -33,6 +32,7 @@ import java.util.Collections;
  * @version Winter 2023
  */
 public class RedPanel extends JPanel implements PropertyChangeListener {
+
     /**
      * This represents the color of the panel.
      */
@@ -41,22 +41,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
     /**
      * This object represents a board object from package model.
      */
-    private Board myBoard = new Board();
-
-    /**
-     * Variable tells whether or not game is over.
-     */
-    protected static boolean gameOver;
-
-    /**
-     * Contains current tetris piece.
-     */
-    private TetrisPiece myTetrisPiece;
-
-    /**
-     * Contains all tetris pieces.
-     */
-    private Rectangle2D[] myGamePieces;
+    private Board myBoard;
 
     /**
      * Contains specific piece and color they will represent.
@@ -69,29 +54,47 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
     private List<Block[]> myFrozenBlocks;
 
     /**
+     * Contains all tetris pieces.
+     */
+    private Rectangle2D[] myGamePieces;
+
+    /**
+     * Variable tells whether or not game is over.
+     */
+    private boolean gameOver;
+
+    /**
+     * Contains current tetris piece.
+     */
+    private TetrisPiece myTetrisPiece;
+
+    /**
      * Holds boolean if game has been started or not.
      */
     private boolean pressToStart;
-
-    /**
-     * Holds size (height) of frozen blocks currently on the Board.
-     */
-    private int theSize;
-
 
     /**
      * This constructor sets the layout, background color, and dimensions
      * of the panel.
      */
     public RedPanel() {
+
+        myBoard = new Board();
+
         setLayout(new BorderLayout());
         setBackground(COLOR);
         setPreferredSize(new Dimension(myBoard.getWidth() * 25, myBoard.getHeight() * 25));
 
         myGamePieces = new Rectangle2D[4];
         myPieceToColor = new TreeMap<>();
-
         myFrozenBlocks = new LinkedList<Block[]>();
+
+        gameOver = false;
+        pressToStart = true;
+
+        for (int i = 0; i < 4; i++) {
+            myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
+        }
 
         for (int h = 0; h < myBoard.getHeight(); h++) {
             myFrozenBlocks.add(new Block[myBoard.getWidth()]);
@@ -104,16 +107,6 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
         myPieceToColor.put("S", Color.GREEN);
         myPieceToColor.put("T", Color.PINK);
         myPieceToColor.put("Z", Color.RED);
-
-        gameOver = false;
-
-        theSize = 0;
-
-        for (int i = 0; i < 4; i++) {
-            myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
-        }
-
-        pressToStart = true;
 
     }
 
@@ -153,6 +146,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
             g2d.drawString("+1200(n) = 4 lines", 50, 435);
 
             pressToStart = false;
+
         } else
             for (int row = 0; row < myBoard.getHeight(); row++) {
                 for (int col = 0; col < myBoard.getWidth(); col++) {
@@ -163,7 +157,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
                 }
 
-                for (int i = theSize - 1; i >= 0; i--) {
+                for (int i = myFrozenBlocks.size() - 1; i >= 0; i--) {
                     final Block[] myRow = myFrozenBlocks.get(i);
 
                     for (int j = 0; j < myRow.length; j++) {
@@ -176,14 +170,14 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
                 }
 
-                if (myTetrisPiece != null && !gameOver) {
+                if (myTetrisPiece != null) {
                     for (int i = 0; i < 4; i++) {
                         g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                         g2d.fill(myGamePieces[i]);
                     }
                 }
 
-        }
+            }
 
         if (gameOver) {
             g2d.setPaint(Color.BLACK);
@@ -208,20 +202,16 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
             myTetrisPiece = temp.getTetrisPiece();
             Rotation myRotation = temp.getRotation();
             Point myPoint = temp.getPosition();
-            int[][] myCoords = myTetrisPiece.getPointsByRotation(temp.getRotation());
+            int[][] myCoords = myTetrisPiece.getPointsByRotation(myRotation);
 
 
             for (int i = 0; i < 4; i++) {
                 myGamePieces[i].setFrame(((myPoint.x() + myCoords[i][0])) * 25, (-(myPoint.y() + myCoords[i][1]) + 19) * 25, 25, 25);
             }
         } else if (theEvt.getPropertyName().equals(myBoard.PROPERTY_FREEZE)) {
-
             myFrozenBlocks = (List<Block[]>) theEvt.getNewValue();
-
-            if (!gameOver) {
-                theSize = findSize(myFrozenBlocks); // find the height of rows that contain frozen blocks to draw on board
-            }
         } else if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CLEAR)) {
+
             final List<Integer> completeRows = (List<Integer>) theEvt.getNewValue();
 
             for (Integer x : completeRows) {
@@ -238,34 +228,4 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
     }
 
-    /**
-     * This method finds the Height of the rows containing Frozen Blocks.
-     *
-     * @param myFrozen The List of Block arrays to find the Height of frozen blocks.
-     * @return The Highest row containing Frozen Blocks.
-     */
-    private int findSize(List<Block[]> myFrozen)
-    {
-        int tester = 0;
-
-        for (Block[] row : myFrozen)
-        {
-            int count = 0;
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (row[i] != null)
-                {
-
-                    count++;
-                }
-            }
-
-            if (count > 0)
-            {
-                tester++;
-            }
-        }
-        return tester;
-    }
 }

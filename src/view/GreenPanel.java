@@ -49,22 +49,22 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * This object is a board object from the model package.
      */
-    private Board myBoard = new Board();
-
-    /**
-     * Holds the tetris piece that will next be played.
-     */
-    private TetrisPiece myTetrisPiece;
+    private Board myBoard;
 
     /**
      * Holds the shape of specific tetris piece to be drawn.
      */
-    private Rectangle2D[] myGamePieces = new Rectangle2D[4];
+    private Rectangle2D[] myGamePieces;
 
     /**
      * Holds color of specific tetris piece to be drawn.
      */
     private Map<String, Color> myPieceToColor;
+
+    /**
+     * Holds the tetris piece that will next be played.
+     */
+    private TetrisPiece myTetrisPiece;
 
 
     /**
@@ -73,6 +73,9 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      */
     public GreenPanel()
     {
+        myBoard = new Board();
+        myGamePieces = new Rectangle2D[4];
+
         setLayout(new BorderLayout());
         setBackground(COLOR);
         setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));

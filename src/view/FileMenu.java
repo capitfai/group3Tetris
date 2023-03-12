@@ -51,7 +51,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
     /**
      * The represents the width of the text.
      */
-    private static final int TEXT_WIDTH = 50;
+    private static final int TEXT_WIDTH = 150;
 
     /**
      * The represents the height of the text.
@@ -134,7 +134,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
                 text.setSize(TEXT_WIDTH, TEXT_HEIGHT);
                 about.setLocationRelativeTo(null);
                 about.setVisible(true);
-                about.setSize(ABOUT_WIDTH * 3 , ABOUT_HEIGHT);
+                about.setSize(ABOUT_WIDTH , ABOUT_HEIGHT);
                 about.add(text);
             }
         });

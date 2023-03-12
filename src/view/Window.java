@@ -85,9 +85,8 @@ public class Window extends JFrame {
     /**
      * Keeps track of whether the game has been paused or not.
      */
-    protected boolean gameInProgress;
+    private boolean gameInProgress;
 
-    protected static boolean endGameEarly;
     /**
      * Keeps track of whether the game can be started again or not.
      */
@@ -107,7 +106,6 @@ public class Window extends JFrame {
         myFileMenu = new FileMenu();
 
         gameInProgress = false;
-        endGameEarly = false;
         pressToStart = true;
 
         myWindow = new JFrame(NAME);
@@ -192,9 +190,9 @@ public class Window extends JFrame {
 
                 else if(theEvent.getKeyCode() == KeyEvent.VK_2)
                 {
+                    myBoard.setGameOver();
                     gameInProgress = false;
-                    RedPanel.gameOver = true;
-                    myTimer.setDelay(0);
+                    myTimer.stop();
                 }
             }
         }

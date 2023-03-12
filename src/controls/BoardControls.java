@@ -118,4 +118,12 @@ public interface BoardControls {
     void removePropertyChangeListener(String thePropertyName,
                                               PropertyChangeListener theListener);
 
+    /**
+     * This method sets the status of the game to false,
+     * and notifies that the game status is over.
+     *
+     */
+    void setGameOver();
+
+
 }
