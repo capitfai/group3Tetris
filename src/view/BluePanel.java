@@ -42,6 +42,172 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int LENGTH_DIM = 100;
 
     /**
+     * Constant for initial value of nextLevel.
+     */
+    private static final int NEXT_LEVEL = 5;
+
+    /**
+     * Constant for initial value of score.
+     */
+    private static final int DEFAULT_SCORE = 0;
+
+    /**
+     * Constant for initial value of lines cleared.
+     */
+    private static final int DEFAULT_LINES = 0;
+
+    /**
+     * Constant for first level.
+     */
+    private static final int DEFAULT_LEVEL = 1;
+
+    /**
+     * Constant for how many milliseconds timer should delay.
+     */
+    private static final int TIMER_DELAY = 1000;
+
+    /**
+     * Size of header text.
+     */
+    private static final int TITLE_SIZE = 25;
+
+    /**
+     * Size of body text.
+     */
+    private static final int BODY_SIZE = 10;
+
+    /**
+     * X-coordinate of header text.
+     */
+    private static final int TITLE_X = 25;
+
+    /**
+     * Y-coordinate of header text.
+     */
+    private static final int TITLE_Y = 175;
+
+    /**
+     * X-coordinate of info text.
+     */
+    private static final int TEXT_X = 10;
+
+    /**
+     * Y-coordinate of rotate (clockwise) controls.
+     */
+    private static final int CW_Y = 200;
+
+    /**
+     * Y-coordinate of rotate (counter-clockwise) controls.
+     */
+    private static final int CCW_Y = 215;
+
+    /**
+     * Y-coordinate of right controls.
+     */
+    private static final int RIGHT_Y = 230;
+
+    /**
+     * Y-coordinate of left controls.
+     */
+    private static final int LEFT_Y = 245;
+
+    /**
+     * Y-coordinate of left controls.
+     */
+    private static final int DOWN_Y = 260;
+
+    /**
+     * Y-coordinate of drop control.
+     */
+    private static final int DROP_Y = 275;
+
+    /**
+     * Y-coordinate of pause control.
+     */
+    private static final int PAUSE_Y = 290;
+
+    /**
+     * Y-coordinate of unpause control.
+     */
+    private static final int UNPAUSE_Y = 305;
+
+    /**
+     * Y-coordinate of end-game control.
+     */
+    private static final int END_Y = 320;
+
+    /**
+     * Y-coordinate of score.
+     */
+    private static final int SCORE_Y = 335;
+
+    /**
+     * Y-coordinate of lines cleared text.
+     */
+    private static final int LINES_CLEAR = 350;
+
+    /**
+     * Y-coordinate of current level text.
+     */
+    private static final int LEVEL_Y = 365;
+
+    /**
+     * Y-coordinate of next level text.
+     */
+    private static final int NEXT_LEVEL_Y = 380;
+
+    /**
+     * Base amount of points scored when piece is placed.
+     */
+    private static final int PIECE_POINTS = 4;
+
+    /**
+     * Points scored when one row is cleared.
+     */
+    private static final int ONE_ROW_POINTS = 40;
+
+    /**
+     * Points scored when two rows are cleared.
+     */
+    private static final int TWO_ROW_POINTS = 100;
+
+    /**
+     * Points scored when three rows are cleared.
+     */
+    private static final int THREE_ROW_POINTS = 300;
+
+    /**
+     * Points scored when four rows are cleared.
+     */
+    private static final int FOUR_ROW_POINTS = 1200;
+
+    /**
+     * One row cleared from Board.
+     */
+    private static final int ONE_ROW_CLEARED = 1;
+
+    /**
+     * Two rows cleared from Board.
+     */
+    private static final int TWO_ROWS_CLEARED = 2;
+
+    /**
+     * Three rows cleared from Board.
+     */
+    private static final int THREE_ROWS_CLEARED = 3;
+
+    /**
+     * Four rows cleared from Board.
+     */
+    private static final int FOUR_ROWS_CLEARED = 4;
+
+
+    /**
+     * Used to reset timer delay to go faster.
+     */
+    private static final int TIMER_ADJUST = 100;
+
+    /**
      * Reference of current Board being played on.
      */
     private Board myBoard;
@@ -89,12 +255,12 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
         mySize = new ArrayList<>();
 
-        myScore = 0;
-        myLines = 0;
-        myLevel = 1;
-        myNextLevel = 5;
+        myScore = DEFAULT_SCORE;
+        myLines = DEFAULT_LINES;
+        myLevel = DEFAULT_LEVEL;
+        myNextLevel = NEXT_LEVEL;
 
-        myDelay = 1000;
+        myDelay = TIMER_DELAY;
     }
 
     /**
@@ -113,25 +279,25 @@ public class BluePanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.setFont(new Font("Italic", Font.ITALIC, 25));
-        g2d.drawString("Controls:", 25, 175);
+        g2d.setFont(new Font("Italic", Font.ITALIC, TITLE_SIZE));
+        g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 
-        g2d.setFont(new Font("Bold", Font.BOLD, 10));
+        g2d.setFont(new Font("Bold", Font.BOLD, BODY_SIZE));
 
-        g2d.drawString("W,w, UP  CW", 10, 200);
-        g2d.drawString("E,e, CCW", 10, 215);
-        g2d.drawString("D,d, >, RIGHT", 10, 230);
-        g2d.drawString("A,a, <, LEFT ", 10, 245);
-        g2d.drawString("S,s, |, DOWN ", 10, 260);
-        g2d.drawString("Space, DROP ", 10, 275);
-        g2d.drawString("P, p, Pause", 10, 290);
-        g2d.drawString("U,u, Unpause", 10, 305);
-        g2d.drawString("2, End Game", 10, 320);
+        g2d.drawString("W, w, ^  CW", TEXT_X, CW_Y);
+        g2d.drawString("E, e, CCW", TEXT_X, CCW_Y);
+        g2d.drawString("D, d, >, RIGHT", TEXT_X, RIGHT_Y);
+        g2d.drawString("A, a, <, LEFT ", TEXT_X, LEFT_Y);
+        g2d.drawString("S, s, |, DOWN ", TEXT_X, DOWN_Y);
+        g2d.drawString("Space, DROP ", TEXT_X, DROP_Y);
+        g2d.drawString("P, p, Pause", TEXT_X, PAUSE_Y);
+        g2d.drawString("U, u, Unpause", TEXT_X, UNPAUSE_Y);
+        g2d.drawString("2, End Game", TEXT_X, END_Y);
 
-        g2d.drawString("SCORE: " + myScore, 10, 335);
-        g2d.drawString("LINES CLEARED: " + myLines, 10, 350);
-        g2d.drawString("LEVEL: " + myLevel, 10, 365);
-        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES.", 10, 380);
+        g2d.drawString("SCORE: " + myScore, TEXT_X, SCORE_Y);
+        g2d.drawString("LINES CLEARED: " + myLines, TEXT_X, LINES_CLEAR);
+        g2d.drawString("LEVEL: " + myLevel, TEXT_X, LEVEL_Y);
+        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES.", TEXT_X, NEXT_LEVEL_Y);
 
     }
 
@@ -145,16 +311,16 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt)
     {
-        if(theEvt.getPropertyName().equals(myBoard.PROPERTY_FREEZE))
+        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_FREEZE))
         {
-            myScore += 4;
+            myScore += PIECE_POINTS;
         }
 
-        if(theEvt.getPropertyName().equals(myBoard.PROPERTY_CLEAR))
+        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CLEAR))
         {
             mySize =  (List<Integer>) theEvt.getNewValue();
 
-            int tempSize = mySize.size();
+            final int tempSize = mySize.size();
 
             myLines += tempSize;
 
@@ -162,37 +328,37 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
             int countLevels = 0;
 
-            while(tempMyLines >= 0)
+            while (tempMyLines >= 0)
             {
-                tempMyLines = tempMyLines - 5;
+                tempMyLines = tempMyLines - NEXT_LEVEL;
                 countLevels++;
             }
 
-            myNextLevel = ((myLines % 5 - 5) * - 1); // single statement?
+            myNextLevel = (myLines % NEXT_LEVEL - NEXT_LEVEL) * -1; // single statement?
 
             myLevel = countLevels;
 
-            if (tempSize == 1)
+            if (tempSize == ONE_ROW_CLEARED)
             {
-                myScore += myLevel * 40;
+                myScore += myLevel * ONE_ROW_POINTS;
             }
 
-            else if (tempSize == 2)
+            else if (tempSize == TWO_ROWS_CLEARED)
             {
-                myScore += myLevel * 100;
+                myScore += myLevel * TWO_ROW_POINTS;
             }
 
-            else if (tempSize == 3)
+            else if (tempSize == THREE_ROWS_CLEARED)
             {
-                myScore += myLevel * 300;
+                myScore += myLevel * THREE_ROW_POINTS;
             }
 
-            else if (tempSize == 4)
+            else if (tempSize == FOUR_ROWS_CLEARED)
             {
-                myScore += myLevel * 1200;
+                myScore += myLevel * FOUR_ROW_POINTS;
             }
 
-            Window.myTimer.setDelay(myDelay - myLevel * 100);
+            Window.myTimer.setDelay(myDelay - myLevel * TIMER_ADJUST);
         }
 
         repaint();

@@ -5,18 +5,16 @@
  */
 package view;
 
+import model.Board;
+import model.Rotation;
+import model.TetrisPiece;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.swing.*;
-import model.Board;
-import model.MovableTetrisPiece;
-import model.Point;
-import model.TetrisPiece;
-import model.Rotation;
 
 /**
  * This object represents a panel holding the next tetris piece
@@ -47,19 +45,54 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final int LENGTH_DIM = 150;
 
     /**
+     * Contains number of rectangles in each piece.
+     */
+    private static final int PIECE_BLOCKS = 4;
+
+    /**
+     * Sets frame values.
+     */
+    private static final int SET_FRAME = 25;
+
+    /**
+     * Contains value of header font size.
+     */
+    private static final int HEADER_SIZE = 20;
+
+    /**
+     * X-coordinate of text.
+     */
+    private static final int TEXT_X = 20;
+
+    /**
+     * Y-coordinate of text.
+     */
+    private static final int TEXT_Y = 25;
+
+    /**
+     * Offset value for calculating piece points.
+     */
+    private static final int PIECE_OFFSET = 18;
+
+    /**
+     * Another offset value for calculating piece points.
+     */
+    private static final int ANOTHER_PIECE_OFFSET = 22;
+
+    /**
      * This object is a board object from the model package.
      */
-    private Board myBoard;
+    private final Board myBoard;
 
     /**
      * Holds the shape of specific tetris piece to be drawn.
      */
-    private Rectangle2D[] myGamePieces;
+    private final Rectangle2D[] myGamePieces;
 
     /**
      * Holds color of specific tetris piece to be drawn.
      */
-    private Map<String, Color> myPieceToColor;
+    private final Map<String, Color> myPieceToColor;
 
     /**
      * Holds the tetris piece that will next be played.
@@ -74,7 +107,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     public GreenPanel()
     {
         myBoard = new Board();
-        myGamePieces = new Rectangle2D[4];
+        myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
         setLayout(new BorderLayout());
         setBackground(COLOR);
@@ -90,7 +123,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         myPieceToColor.put("T", Color.PINK);
         myPieceToColor.put("Z", Color.RED);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < PIECE_BLOCKS; i++)
         {
             myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
         }
@@ -103,29 +136,25 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      *          and the property that has changed.
      */
     @Override
-    public void propertyChange(final PropertyChangeEvent theEvt) {
+    public void propertyChange(final PropertyChangeEvent theEvt)
+    {
 
-            if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CHANGE)) {
+        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CHANGE))
+        {
 
-                    MovableTetrisPiece temp = (MovableTetrisPiece) theEvt.getOldValue();
+            myTetrisPiece = (TetrisPiece) theEvt.getNewValue();
 
-                    myTetrisPiece = (TetrisPiece) theEvt.getNewValue();
+            final int[][] coords = myTetrisPiece.getPointsByRotation(Rotation.NONE);
 
-                    Point myP = temp.getPosition();
+            for (int i = 0; i < PIECE_BLOCKS; i++)
+            {
 
-                    Point[] myBlock = myTetrisPiece.getPoints();
+                myGamePieces[i].setFrame((2 + coords[i][0] - 1) * SET_FRAME,
+                        (-(PIECE_OFFSET + coords[i][1]) + ANOTHER_PIECE_OFFSET)
+                                * SET_FRAME, SET_FRAME, SET_FRAME);
 
-                    int[][] myCoords = myTetrisPiece.getPointsByRotation(Rotation.NONE);
-
-
-                    for (int i = 0; i < 4; i++) {
-                        // shifts each block in the TetrisPiece to new position;
-                        // myP.x() == myCoords[i][0]
-                        // myP.y() == myCoords[i][1]
-
-                        myGamePieces[i].setFrame((2 + myCoords[i][0] - 1) * 25, (-(18 + myCoords[i][1])+22) * 25, 25, 25);
-                    }
             }
+        }
 
         repaint();
 
@@ -137,7 +166,8 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      * @param theGraphics the <code>Graphics</code> object to protect
      */
     @Override
-    public void paintComponent(final Graphics theGraphics) {
+    public void paintComponent(final Graphics theGraphics)
+    {
         super.paintComponent(theGraphics);
         final Graphics2D g2d = (Graphics2D) theGraphics;
 
@@ -146,11 +176,13 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.BOLD, 20));
-        g2d.drawString("Next Piece!", 20, 25);
+        g2d.setFont(new Font("Arial", Font.BOLD, HEADER_SIZE));
+        g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
-        if (myTetrisPiece != null) {
-            for (int i = 0; i < 4; i++) {
+        if (myTetrisPiece != null)
+        {
+            for (int i = 0; i < PIECE_BLOCKS; i++)
+            {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
             }
