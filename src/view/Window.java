@@ -42,7 +42,7 @@ public class Window extends JFrame {
     /**
      * Timer that controls how game functions.
      */
-    protected final Timer myTimer;
+    protected static Timer myTimer;
 
     /**
      * This is a red panel object.
@@ -77,8 +77,9 @@ public class Window extends JFrame {
     /**
      * Keeps track of whether the game has been paused or not.
      */
-    private boolean gameInProgress;
+    protected boolean gameInProgress;
 
+    protected static boolean endGameEarly;
     /**
      * Keeps track of whether the game can be started again or not.
      */
@@ -98,6 +99,7 @@ public class Window extends JFrame {
         myFileMenu = new FileMenu();
 
         gameInProgress = false;
+        endGameEarly = false;
         pressToStart = true;
 
         myWindow = new JFrame(NAME);
@@ -117,7 +119,7 @@ public class Window extends JFrame {
         myTimer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEve) {
-                if (gameInProgress) {
+                if (myTimer.isRunning()) {
                     myBoard.step();
                 }
             }
@@ -171,11 +173,20 @@ public class Window extends JFrame {
                 } else if (theEvent.getKeyCode() == KeyEvent.VK_W
                         || theEvent.getKeyCode() == KeyEvent.VK_UP) {
                     myBoard.rotateCW();
+                } else if (theEvent.getKeyCode() == KeyEvent.VK_E) {
+                        myBoard.rotateCCW();
                 } else if (theEvent.getKeyCode() == KeyEvent.VK_S
                         || theEvent.getKeyCode() == KeyEvent.VK_DOWN) {
                     myBoard.down();
                 } else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     myBoard.drop();
+                }
+
+                else if(theEvent.getKeyCode() == KeyEvent.VK_2)
+                {
+                    gameInProgress = false;
+                    RedPanel.gameOver = true;
+                    myTimer.setDelay(0);
                 }
             }
         }

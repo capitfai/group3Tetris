@@ -228,11 +228,9 @@ public class Board implements BoardControls {
     public void down() {
 
         if (!move(myCurrentPiece.down())) {
-
-            Point newPosition = myCurrentPiece.getPosition();
-            myPcs.firePropertyChange(PROPERTY_FREEZE, myCurrentPiece, newPosition);
             // the piece froze, so clear lines and update current piece
             addPieceToBoardData(myFrozenBlocks, myCurrentPiece);
+            myPcs.firePropertyChange(PROPERTY_FREEZE, null, myFrozenBlocks);
             checkRows();
 
             if (!myGameOver)
@@ -243,9 +241,9 @@ public class Board implements BoardControls {
             // TODO Publish Update!
         }
 
-        else {
-            Point newPosition = myCurrentPiece.getPosition();
-            myPcs.firePropertyChange(PROPERTY_MOVE, myCurrentPiece, newPosition);
+        else
+        {
+            myPcs.firePropertyChange(PROPERTY_MOVE, null, myCurrentPiece);
         }
 
     }
@@ -258,8 +256,7 @@ public class Board implements BoardControls {
         {
             move(myCurrentPiece.left());
 
-            Point newPosition = myCurrentPiece.getPosition();
-            myPcs.firePropertyChange(PROPERTY_MOVE, myCurrentPiece, newPosition);
+            myPcs.firePropertyChange(PROPERTY_MOVE, null, myCurrentPiece);
         }
     }
 
@@ -271,7 +268,7 @@ public class Board implements BoardControls {
             move(myCurrentPiece.right());
             Point newPosition = myCurrentPiece.getPosition();
 
-            myPcs.firePropertyChange(PROPERTY_MOVE, myCurrentPiece, newPosition);
+            myPcs.firePropertyChange(PROPERTY_MOVE, null, myCurrentPiece);
         }
     }
 
@@ -299,9 +296,7 @@ public class Board implements BoardControls {
                         break;
                     }
                 }
-
-                Rotation newRotation = myCurrentPiece.getRotation();
-                myPcs.firePropertyChange(PROPERTY_ROTATED, myCurrentPiece, newRotation);
+                myPcs.firePropertyChange(PROPERTY_ROTATED, null,  myCurrentPiece);
             }
         }
     }
@@ -325,6 +320,8 @@ public class Board implements BoardControls {
                         break;
                     }
                 }
+
+                myPcs.firePropertyChange(PROPERTY_ROTATED, null,  myCurrentPiece);
             }
         }
     }
@@ -341,7 +338,6 @@ public class Board implements BoardControls {
 
             down();  // move down one more time to freeze in place
             myDrop = false;
-
         }
     }
 
@@ -423,7 +419,7 @@ public class Board implements BoardControls {
             myCurrentPiece = theMovedPiece;
             result = true;
             if (!myDrop) {
-                myPcs.firePropertyChange(PROPERTY_CHANGE, myCurrentPiece, myNextPiece);
+                 myPcs.firePropertyChange(PROPERTY_CHANGE, myCurrentPiece, myNextPiece);
                 // TODO Publish Update!
             }
         }
@@ -447,7 +443,7 @@ public class Board implements BoardControls {
             if (p.x() < 0 || p.x() >= myWidth) {
                 result = false;
             }
-            if (p.y() < 0 || p.y() >= myHeight ) {
+            if (p.y() < 0) {
                 result = false;
             }
         }
@@ -485,7 +481,7 @@ public class Board implements BoardControls {
             }
             if (complete) {
                 completeRows.add(myFrozenBlocks.indexOf(row));
-                myPcs.firePropertyChange(PROPERTY_CLEAR, myCurrentPiece, completeRows);
+                myPcs.firePropertyChange(PROPERTY_CLEAR, null, completeRows);
                 // TODO Publish Update!
             }
         }
@@ -590,7 +586,7 @@ public class Board implements BoardControls {
 
         final TetrisPiece next = myNextPiece;
 
-        int startY = -2; // so that the pieces spawn first before the board
+        int startY = myHeight - 1;
         if (myNextPiece == TetrisPiece.I) {
             startY--;
         }

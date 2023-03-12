@@ -1,12 +1,10 @@
 package view;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import model.Board;
-import controls.BoardControls;
 
 /**
  * This is program is a JMenuBar containing a file menu for a tetris game.
@@ -21,7 +19,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
     /**
      * The text message that appears when the button "About" is called.
      */
-    private static final String TEXT_ABOUT_MSG = "SCORING GUIDE: ";
+    private static final String TEXT_ABOUT_MSG = "Winter 2023: By Avreen, Faith, Josh and Sullivan";
 
     /**
      * The represents the width of the frame.
@@ -129,7 +127,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
                 text.setSize(TEXT_WIDTH, TEXT_HEIGHT);
                 about.setLocationRelativeTo(null);
                 about.setVisible(true);
-                about.setSize(ABOUT_WIDTH, ABOUT_HEIGHT);
+                about.setSize(ABOUT_WIDTH * 3 , ABOUT_HEIGHT);
                 about.add(text);
             }
         });
@@ -164,7 +162,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent theEvt)
     {
-        if(theEvt.getPropertyName().equals(myBoard.PROPERTY_OVER))
+        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_OVER))
         {
             myGameState = true;
         }

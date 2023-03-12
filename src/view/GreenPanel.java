@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
 import model.Board;
-import model.TetrisPiece;
 import model.MovableTetrisPiece;
 import model.Point;
+import model.TetrisPiece;
+import model.Rotation;
 
 /**
  * This object represents a green panel of the GUI.
@@ -23,7 +24,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * This represents the color of the panel.
      */
-    private static final Color COLOR = new Color(190,120,150);
+    private static final Color COLOR = new Color(190, 120, 150);
 
     /**
      * This represents the width of the panel.
@@ -42,9 +43,9 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
 
     private TetrisPiece myTetrisPiece;
 
-    Rectangle2D[] myGamePieces = new Rectangle2D[4];
+    private Rectangle2D[] myGamePieces = new Rectangle2D[4];
 
-    Map<String, Color> myPieceToColor;
+    private Map<String, Color> myPieceToColor;
 
 
     /**
@@ -67,29 +68,37 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         myPieceToColor.put("T", Color.PINK);
         myPieceToColor.put("Z", Color.RED);
 
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            myGamePieces[i] = new Rectangle2D.Double(0,0,0,0);
+            myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
         }
     }
 
 
     @Override
-    public void propertyChange(PropertyChangeEvent theEvt) {
+    public void propertyChange(final PropertyChangeEvent theEvt) {
+
+            if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CHANGE)) {
+
+                    MovableTetrisPiece temp = (MovableTetrisPiece) theEvt.getOldValue();
+
+                    myTetrisPiece = (TetrisPiece) theEvt.getNewValue();
+
+                    Point myP = temp.getPosition();
+
+                    Point[] myBlock = myTetrisPiece.getPoints();
+
+                    int[][] myCoords = myTetrisPiece.getPointsByRotation(Rotation.NONE);
 
 
-        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_CHANGE)) {
+                    for (int i = 0; i < 4; i++) {
+                        // shifts each block in the TetrisPiece to new position;
+                        // myP.x() == myCoords[i][0]
+                        // myP.y() == myCoords[i][1]
 
-            TetrisPiece temp = (TetrisPiece) theEvt.getNewValue();
-
-            myTetrisPiece = temp;
-
-            Point[] myBlock = myTetrisPiece.getPoints();
-
-            for (int i = 0; i < 4; i++) {
-                myGamePieces[i].setFrame((myBlock[i].x() + 1)* 25, (myBlock[i].y() + 1)* 25, 25, 25);
+                        myGamePieces[i].setFrame((2 + myCoords[i][0] - 1) * 25, (-(18 + myCoords[i][1])+22) * 25, 25, 25);
+                    }
             }
-        }
 
         repaint();
 
@@ -108,7 +117,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
         g2d.drawString("Next Piece!", 20, 25);
 
-        if(myTetrisPiece != null) {
+        if (myTetrisPiece != null) {
             for (int i = 0; i < 4; i++) {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
