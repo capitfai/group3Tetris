@@ -9,6 +9,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Board;
@@ -242,6 +244,8 @@ public class BluePanel extends JPanel implements PropertyChangeListener
      */
     private List<Integer> mySize;
 
+    private Font pixelMplus;
+
     /**
      * This constructor sets the layout, background color, and dimensions
      * of the panel.
@@ -261,6 +265,16 @@ public class BluePanel extends JPanel implements PropertyChangeListener
         myNextLevel = NEXT_LEVEL;
 
         myDelay = TIMER_DELAY;
+
+        try
+        {
+            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("PixelMplus12-Bold.ttf"));
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PixelMplus12-Bold.ttf")));
+        }
+        catch (IOException | FontFormatException e) {
+        }
     }
 
     /**
@@ -279,10 +293,10 @@ public class BluePanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.setFont(new Font("Italic", Font.ITALIC, TITLE_SIZE));
+        g2d.setFont(pixelMplus.deriveFont(20f));
         g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 
-        g2d.setFont(new Font("Bold", Font.BOLD, BODY_SIZE));
+        g2d.setFont(pixelMplus.deriveFont(13f));
 
         g2d.drawString("W, w, ^  CW", TEXT_X, CW_Y);
         g2d.drawString("E, e, CCW", TEXT_X, CCW_Y);

@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -99,6 +101,10 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      */
     private TetrisPiece myTetrisPiece;
 
+    /**
+     * Imported font for gameplay info.
+     */
+    private Font pixelMplus;
 
     /**
      * This constructor sets the layout, background color, and dimensions
@@ -122,6 +128,16 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         myPieceToColor.put("S", Color.GREEN);
         myPieceToColor.put("T", Color.PINK);
         myPieceToColor.put("Z", Color.RED);
+
+        try
+        {
+            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("PixelMplus12-Bold.ttf"));
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PixelMplus12-Bold.ttf")));
+        }
+        catch (IOException | FontFormatException e) {
+        }
 
         for (int i = 0; i < PIECE_BLOCKS; i++)
         {
@@ -176,7 +192,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.BOLD, HEADER_SIZE));
+        g2d.setFont(pixelMplus.deriveFont(20f));
         g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
         if (myTetrisPiece != null)
@@ -185,6 +201,9 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
             {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
+                g2d.setColor(Color.BLACK);
+                g2d.setStroke(new BasicStroke(1));
+                g2d.draw(myGamePieces[i]);
             }
         }
     }
