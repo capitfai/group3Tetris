@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.*;
@@ -10,9 +15,14 @@ import java.util.List;
 import model.Board;
 
 /**
- * This object represents a blue panel of the GUI.
+ * This object represents the panel that holds the score and level info
+ * of the current game.
  *
  * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
+ *
  * @version Winter 2023
  */
 public class BluePanel extends JPanel implements PropertyChangeListener
@@ -32,18 +42,39 @@ public class BluePanel extends JPanel implements PropertyChangeListener
      */
     private static final int LENGTH_DIM = 100;
 
+    /**
+     * Reference of current Board being played on.
+     */
     private Board myBoard;
 
+    /**
+     * Contains user's score in current game.
+     */
     private int myScore;
 
+    /**
+     * Contains lines cleared in game.
+     */
     private int myLines;
 
+    /**
+     * Keeps track of current level.
+     */
     private int myLevel;
 
+    /**
+     * Tracks next level to be achieved.
+     */
     private int myNextLevel;
 
+    /**
+     * Contains timer delay of how fast to run.
+     */
     private int myDelay;
 
+    /**
+     * List holding amount of lines have been cleared on the Board.
+     */
     private List<Integer> mySize;
 
     /**
@@ -67,6 +98,11 @@ public class BluePanel extends JPanel implements PropertyChangeListener
         myDelay = 1000;
     }
 
+    /**
+     * Lists out the controls, levels and lines cleared in panel.
+     *
+     * @param theGraphics the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(final Graphics theGraphics)
     {
@@ -100,6 +136,13 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
     }
 
+    /**
+     * Listens to the events happening on the board to calculate the level and
+     * current score of game.
+     *
+     * @param theEvt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
+     */
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt)
     {

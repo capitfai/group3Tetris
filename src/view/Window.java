@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.*;
@@ -9,10 +14,13 @@ import javax.swing.*;
 import controls.BoardControls;
 
 /**
- * This object represents the frame of the GUI.
+ * This object represents the upper-most frame of the GUI and lists
+ * out its contents.
  *
  * @author Avreen Kaur
- * @author Faith
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
  *
  * @version Winter 2023
  */

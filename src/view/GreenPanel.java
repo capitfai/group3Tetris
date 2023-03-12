@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.*;
@@ -14,9 +19,14 @@ import model.TetrisPiece;
 import model.Rotation;
 
 /**
- * This object represents a green panel of the GUI.
+ * This object represents a panel holding the next tetris piece
+ * in the current game.
  *
  * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
+ *
  * @version Winter 2023
  */
 public class GreenPanel extends JPanel implements PropertyChangeListener
@@ -41,10 +51,19 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      */
     private Board myBoard = new Board();
 
+    /**
+     * Holds the tetris piece that will next be played.
+     */
     private TetrisPiece myTetrisPiece;
 
+    /**
+     * Holds the shape of specific tetris piece to be drawn.
+     */
     private Rectangle2D[] myGamePieces = new Rectangle2D[4];
 
+    /**
+     * Holds color of specific tetris piece to be drawn.
+     */
     private Map<String, Color> myPieceToColor;
 
 
@@ -74,7 +93,12 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         }
     }
 
-
+    /**
+     * Listens for when next piece in sequence has changed and displays on panel.
+     *
+     * @param theEvt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
+     */
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt) {
 
@@ -104,6 +128,11 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
 
     }
 
+    /**
+     * Draws the piece next in sequence.
+     *
+     * @param theGraphics the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);

@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.*;
@@ -21,6 +26,10 @@ import java.util.Collections;
  * This object represents a red panel of the GUI.
  *
  * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
+ *
  * @version Winter 2023
  */
 public class RedPanel extends JPanel implements PropertyChangeListener {
@@ -30,32 +39,43 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
     private static final Color COLOR = Color.WHITE;
 
     /**
-     * This represents the width of the panel.
-     */
-    private static final int WIDTH_DIM = 100;
-
-    /**
-     * This represents the length of the panel.
-     */
-    private static final int LENGTH_DIM = 100;
-
-    /**
      * This object represents a board object from package model.
      */
     private Board myBoard = new Board();
 
+    /**
+     * Variable tells whether or not game is over.
+     */
     protected static boolean gameOver;
 
+    /**
+     * Contains current tetris piece.
+     */
     private TetrisPiece myTetrisPiece;
 
+    /**
+     * Contains all tetris pieces.
+     */
     private Rectangle2D[] myGamePieces;
 
+    /**
+     * Contains specific piece and color they will represent.
+     */
     private Map<String, Color> myPieceToColor;
 
+    /**
+     * List that holds all the compounded frozen blocks.
+     */
     private List<Block[]> myFrozenBlocks;
 
+    /**
+     * Holds boolean if game has been started or not.
+     */
     private boolean pressToStart;
 
+    /**
+     * Holds size (height) of frozen blocks currently on the Board.
+     */
     private int theSize;
 
 
@@ -97,6 +117,11 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
 
     }
 
+    /**
+     * Draws and displays info and running game in panel.
+     *
+     * @param theGraphics the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(final Graphics theGraphics) {
 
@@ -167,6 +192,12 @@ public class RedPanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Listens for different piece behaviors and animates the pieces on the Board.
+     *
+     * @param theEvt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent theEvt) {
 

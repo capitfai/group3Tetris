@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.event.*;
@@ -9,10 +14,12 @@ import model.Board;
 /**
  * This is program is a JMenuBar containing a file menu for a tetris game.
  *
- * @author Sullivan Lucier-Benson
+ * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
  * @author Josh Chang
- * @version Winter 2023
  *
+ * @version Winter 2023
  */
 public class FileMenu extends JMenuBar implements PropertyChangeListener {
 
@@ -159,6 +166,12 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener {
         });
     }
 
+    /**
+     * Listens to whether or not the game is over.
+     *
+     * @param theEvt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent theEvt)
     {
