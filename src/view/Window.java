@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import java.awt.*;
@@ -5,20 +10,31 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.security.Key;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
-import model.BoardControls;
+import controls.BoardControls;
 
 /**
- * This object represents the frame of the GUI.
+ * This object represents the upper-most frame of the GUI and lists
+ * out its contents.
  *
  * @author Avreen Kaur
- * @author Faith
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
  *
  * @version Winter 2023
  */
 public class Window extends JFrame
 {
     // FIELDS
+
+    /**
+     * Timer that controls how game functions.
+     */
+    protected static Timer myTimer;
 
     /**
      * This represents the name of the frame.
@@ -39,11 +55,6 @@ public class Window extends JFrame
      * Milliseconds between each call to timer.
      */
     private static final int TIMER_DELAY = 1000;
-
-    /**
-     * Timer that controls how game functions.
-     */
-    protected final Timer myTimer;
 
     /**
      * This is a red panel object.
@@ -68,7 +79,7 @@ public class Window extends JFrame
     /**
      * File menu at top of window.
      */
-    private FileMenu myFileMenu = new FileMenu();
+    private FileMenu myFileMenu;
 
     /**
      * This represents a Board Object of the model package.
@@ -76,16 +87,15 @@ public class Window extends JFrame
     private final BoardControls myBoard;
 
     /**
-     * This is the drawBoardPanel object which represents the board
-     * of the game as a drawing in Red Panel.
+     * Keeps track of whether the game has been paused or not.
      */
-    private final DrawBoardPanel myBoardPanel = new DrawBoardPanel();
+    private boolean myGameInProgress;
 
     /**
-     * This is the drawPiecePanel object which represents the next piece
-     * of the game as a drawing in Green Panel.
+     * Keeps track of whether the game can be started again or not.
      */
-    private final DrawPiecePanel myPiecePanel = new DrawPiecePanel();
+    private boolean myPressToStart;
+
 
     // CONSTRUCTORS
 
@@ -99,22 +109,40 @@ public class Window extends JFrame
         myBoard = theBoard;
         myBoard.newGame();
 
+        myGameInProgress = false;
+        myPressToStart = true;
+        setUpComponents();
+        setTimer();
+        addListeners();
+
+        myWindow.addKeyListener(new BoardKeyListener());
+
+    }
+
+    public void setUpComponents()
+    {
+
+        myFileMenu = new FileMenu();
+
         myWindow = new JFrame(NAME);
         myWindow.setLayout(new BorderLayout());
 
-        myRed.add(myBoardPanel);
-        myGreen.add(myPiecePanel);
-
-        myBlue.getPanel().add(myGreen.getPanel(), BorderLayout.NORTH);
-        myRed.getPanel().add(myBlue.getPanel(), BorderLayout.EAST);
-
         myWindow.add(myFileMenu, BorderLayout.NORTH);
-        myWindow.add(myRed.getPanel(), BorderLayout.CENTER);
+        myBlue.add(myGreen, BorderLayout.NORTH);
+        myRed.add(myBlue, BorderLayout.EAST);
+        myWindow.add(myRed, BorderLayout.CENTER);
 
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myWindow.setSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
-        // myWindow.setResizable(false);
+        myWindow.setResizable(false);
         myWindow.setVisible(true);
+
+        myWindow.setFocusable(true);
+        myWindow.requestFocus();
+    }
+
+    public void setTimer()
+    {
 
         myTimer = new Timer(TIMER_DELAY, null);
         myTimer.addActionListener(new ActionListener()
@@ -122,51 +150,95 @@ public class Window extends JFrame
             @Override
             public void actionPerformed(final ActionEvent theEve)
             {
-                myBoard.step();
+                if (myTimer.isRunning())
+                {
+                    myBoard.step();
+                }
             }
         });
+    }
 
-        myBoard.addPropertyChangeListener(myBoardPanel);
-        myBoard.addPropertyChangeListener(myPiecePanel);
+    public void addListeners()
+    {
 
-        myWindow.addKeyListener(new BoardKeyListener());
-        myWindow.setFocusable(true);
-        myWindow.requestFocus();
+        myBoard.addPropertyChangeListener(myRed);
+        myBoard.addPropertyChangeListener(myGreen);
+        myBoard.addPropertyChangeListener(myBlue);
+        myBoard.addPropertyChangeListener(myFileMenu);
 
     }
 
-    class BoardKeyListener extends KeyAdapter
+    private class BoardKeyListener extends KeyAdapter
     {
+
         @Override
         public void keyPressed(final KeyEvent theEvent)
         {
-            if (theEvent.getKeyCode() == KeyEvent.VK_A
-                    || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
+
+            if (myPressToStart)
             {
-                myBoard.left();
+                if (theEvent.getKeyCode() == KeyEvent.VK_1) // start the game
+                {
+                    myTimer.start();
+                    myGameInProgress = true; // game has started, control the pieces
+                    myPressToStart = false;
+                }
             }
 
-            else if (theEvent.getKeyCode() == KeyEvent.VK_D
-                    || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
+            else if (theEvent.getKeyCode() == KeyEvent.VK_P) // pause the game
             {
-                myBoard.right();
+                if (myTimer.isRunning())
+                {
+                    myTimer.stop();
+                    myGameInProgress = false; // no controlling the piece
+                }
+            }
+            else if (theEvent.getKeyCode() == KeyEvent.VK_U) // unpause the game
+            {
+                if (!myTimer.isRunning())
+                {
+                    myTimer.start();
+                    myGameInProgress = true; // can control the piece
+                }
             }
 
-            else if (theEvent.getKeyCode() == KeyEvent.VK_W
-                    || theEvent.getKeyCode() == KeyEvent.VK_UP)
+            if (myGameInProgress)
             {
-                myBoard.rotateCW();
-            }
+                if (theEvent.getKeyCode() == KeyEvent.VK_A
+                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
+                {
+                    myBoard.left();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_D
+                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
+                {
+                    myBoard.right();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_W
+                        || theEvent.getKeyCode() == KeyEvent.VK_UP)
+                {
+                    myBoard.rotateCW();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_E)
+                {
+                    myBoard.rotateCCW();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_S
+                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
+                {
+                    myBoard.down();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
+                {
+                    myBoard.drop();
+                }
 
-            else if (theEvent.getKeyCode() == KeyEvent.VK_S
-                    || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
-            {
-                myBoard.down();
-            }
-
-            else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
-            {
-                myBoard.drop();
+                else if (theEvent.getKeyCode() == KeyEvent.VK_2)
+                {
+                    myBoard.setGameOver();
+                    myGameInProgress = false;
+                    myTimer.stop();
+                }
             }
         }
     }

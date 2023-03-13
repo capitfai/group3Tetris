@@ -1,3 +1,8 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
 import model.Board;
@@ -6,6 +11,10 @@ import model.Board;
  * This is the root program driver that opens the GUI.
  *
  * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
+ * @author Josh Chang
+ *
  * @version Winter 2023
  */
 public final class Application

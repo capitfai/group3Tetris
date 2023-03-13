@@ -1,4 +1,6 @@
-package model;
+package controls;
+
+import model.TetrisPiece;
 
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -70,6 +72,7 @@ public interface BoardControls {
      * Try to rotate the movable piece in the clockwise direction.
      */
     void rotateCW();
+
     /**
      * Try to rotate the movable piece in the counter-clockwise direction.
      */
@@ -80,36 +83,6 @@ public interface BoardControls {
      * Drop the piece until piece is set.
      */
     void drop();
-
-
-    /**
-     * Returns the name of the property when a piece moves.
-     *
-     * @return PROPERTY_PIECE_MOVED The string representation of the piece being moved.
-     */
-    String getMovePropertyName();
-
-    /**
-     * Returns the name of the property when a piece rotates.
-     *
-     * @return PROPERTY_PIECE_ROTATED The string representation of the piece being rotated.
-     */
-    String getMovePropertyRotated();
-
-    /**
-     * Returns the name of the property when a row(s) are cleared.
-     *
-     * @return PROPERTY_ROW_CLEARED The string representation
-     *         of the row being cleared property.
-     */
-    String getMovePropertyClear();
-
-    /**
-     * Returns the name of the property when a piece changes.
-     *
-     * @return PROPERTY_PIECE_CHANGE The string representation of the piece being changed.
-     */
-    String getMovePropertyPieceChange();
 
     /**
      * This method adds the Property Change Listener
@@ -144,5 +117,13 @@ public interface BoardControls {
      */
     void removePropertyChangeListener(String thePropertyName,
                                               PropertyChangeListener theListener);
+
+    /**
+     * This method sets the status of the game to false,
+     * and notifies that the game status is over.
+     *
+     */
+    void setGameOver();
+
 
 }
