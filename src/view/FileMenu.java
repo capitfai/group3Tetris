@@ -28,27 +28,18 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener
      * The text message that appears when the button "About" is called.
      */
     private static final String TEXT_ABOUT_MSG = "Winter 2023: By Avreen, Faith, "
-                                                + "Josh and Sullivan";
-
-    /**
-     * The represents the width of the frame.
-     */
-    private static final int FRAME_WIDTH = 500;
-
-    /**
-     * The represents the height of the frame.
-     */
-    private static final int FRAME_HEIGHT = 500;
+                                                + "Josh and Sullivan\nFont imported from public site:"
+            + "\nhttps://itouhiro.hatenablog.com/entry/20130602/font";
 
     /**
      * The represents the width of the About file menu item.
      */
-    private static final int ABOUT_WIDTH = 100;
+    private static final int ABOUT_WIDTH = 300;
 
     /**
      * The represents the height of the About file menu item.
      */
-    private static final int ABOUT_HEIGHT = 100;
+    private static final int ABOUT_HEIGHT = 300;
 
     /**
      * The represents the width of the text.

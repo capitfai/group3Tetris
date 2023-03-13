@@ -82,6 +82,16 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final int ANOTHER_PIECE_OFFSET = 22;
 
     /**
+     * Sets rectangle to be drawn to give a look of border.
+     */
+    private static final int BORDER_OFFSET = 5;
+
+    /**
+     * Sizes rectangle to draw inner fill of border.
+     */
+    private static final int BORDER_DRAW_OFFSET = 10;
+
+    /**
      * This object is a board object from the model package.
      */
     private final Board myBoard;
@@ -133,10 +143,12 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         {
             pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
                     new File("PixelMplus12-Bold.ttf"));
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PixelMplus12-Bold.ttf")));
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("PixelMplus12-Bold.ttf")));
         }
-        catch (IOException | FontFormatException e) {
+        catch (final IOException | FontFormatException e)
+        {
         }
 
         for (int i = 0; i < PIECE_BLOCKS; i++)
@@ -192,8 +204,8 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.fillRect(5, 5,
-                WIDTH_DIM - 10, LENGTH_DIM - 10);
+        g2d.fillRect(BORDER_OFFSET, BORDER_OFFSET,
+                WIDTH_DIM - BORDER_DRAW_OFFSET, LENGTH_DIM - BORDER_DRAW_OFFSET);
 
         g2d.setPaint(Color.BLUE);
         g2d.setFont(pixelMplus.deriveFont(20f));

@@ -56,19 +56,59 @@ public class RedPanel extends JPanel implements PropertyChangeListener
     private static final int PIECE_BLOCKS = 4;
 
     /**
-     * Contains header font size.
+     * Sets text size according to panel.
      */
-    private static final int HEADER_SIZE = 15;
+    private static final int TEXT_SIZING = 25;
 
     /**
-     * Y-coordinate for header.
+     * Y-coordinate of subheader text.
      */
-    private static final int HEADER_Y = 275;
+    private static final int SUBHEADING_Y = 250;
 
     /**
-     * Stroke thickness of tetris pieces.
+     * Y-coordinate of first instruction line.
      */
-    private static final int STROKE = 1;
+    private static final int FIRST_LINE_Y = 275;
+
+    /**
+     * Y-coordinate of second instruction line.
+     */
+    private static final int SECOND_LINE_Y = 295;
+
+    /**
+     * Y-coordinate of third instruction line.
+     */
+    private static final int THIRD_LINE_Y = 315;
+
+    /**
+     * Y-coordinate of fourth instruction line.
+     */
+    private static final int FOURTH_LINE_Y = 335;
+
+    /**
+     * Y-coordinate of fifth instruction line.
+     */
+    private static final int FIFTH_LINE_Y = 355;
+
+    /**
+     * Y-coordinate of sixth instruction line.
+     */
+    private static final int SIXTH_LINE_Y = 375;
+
+    /**
+     * Y-coordinate of seventh instruction line.
+     */
+    private static final int SEVENTH_LINE_Y = 395;
+
+    /**
+     * Y-coordinate of eighth instruction line.
+     */
+    private static final int EIGHTH_LINE_Y = 415;
+
+    /**
+     * Y-coordinate of ninth instruction line.
+     */
+    private static final int NINTH_LINE_Y = 435;
 
     /**
      * This object represents a board object from package model.
@@ -105,7 +145,10 @@ public class RedPanel extends JPanel implements PropertyChangeListener
      */
     private boolean myPressToStart;
 
-    protected Font pixelMplus;
+    /**
+     * Imported font for all text shown in game.
+     */
+    private Font myFont;
 
     /**
      * This constructor sets the layout, background color, and dimensions
@@ -127,12 +170,14 @@ public class RedPanel extends JPanel implements PropertyChangeListener
 
         try
         {
-            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
+            myFont = Font.createFont(Font.TRUETYPE_FONT,
                     new File("PixelMplus12-Bold.ttf"));
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PixelMplus12-Bold.ttf")));
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("PixelMplus12-Bold.ttf")));
         }
-        catch (IOException | FontFormatException e) {
+        catch (final IOException | FontFormatException e)
+        {
         }
 
         for (int i = 0; i < PIECE_BLOCKS; i++)
@@ -171,27 +216,33 @@ public class RedPanel extends JPanel implements PropertyChangeListener
 
         if (myPressToStart)
         {
-//            g2d.setPaint(Color.BLACK);
-//            g2d.fillRect(25, 25, myBoard.getWidth() * 25 - 50, myBoard.getHeight() * 25 - 50);
+
+            final int gameTitleSpacing = 7; // offsets title according to game board
+            final int yOffset = 4; // sets title quarter down from top of board
+            final int textXOffset = 6; // offsets text to be centered
+            final int scoringX = 3; // offsets scoring guide text to be centered
 
             g2d.setPaint(Color.RED);
-            g2d.setFont(pixelMplus.deriveFont(35f));
-            g2d.drawString("T E T R I S", (myBoard.getWidth() * 25) / 7, (myBoard.getHeight() * 25) / 4);
+            g2d.setFont(myFont.deriveFont(35f));
+            g2d.drawString("T E T R I S", (myBoard.getWidth() * TEXT_SIZING)
+                            / gameTitleSpacing, (myBoard.getHeight() * TEXT_SIZING)
+                            / yOffset);
 
             g2d.setPaint(Color.WHITE);
-            g2d.setFont(pixelMplus.deriveFont(20f));
-            g2d.drawString("Press 1 to start!", (myBoard.getWidth() * 25) / 6, 250);
+            g2d.setFont(myFont.deriveFont(20f));
+            g2d.drawString("Press 1 to start!", (myBoard.getWidth() * TEXT_SIZING)
+                    / textXOffset, SUBHEADING_Y);
 
-            g2d.setFont(pixelMplus.deriveFont(13f));
-            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * 25) / 3, 275);
-            g2d.drawString("+4 points when a piece", TEXT_X, 295);
-            g2d.drawString("freezes in place.", TEXT_X, 315);
-            g2d.drawString("+1 level (n) each 5 lines ", TEXT_X, 335);
-            g2d.drawString("cleared.", TEXT_X, 355);
-            g2d.drawString("+  40(n) = 1 line", TEXT_X, 375);
-            g2d.drawString("+ 100(n) = 2 lines", TEXT_X, 395);
-            g2d.drawString("+ 300(n) = 3 lines", TEXT_X, 415);
-            g2d.drawString("+1200(n) = 4 lines", TEXT_X, 435);
+            g2d.setFont(myFont.deriveFont(13f));
+            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * TEXT_SIZING) / scoringX, FIRST_LINE_Y);
+            g2d.drawString("+4 points when a piece", TEXT_X, SECOND_LINE_Y);
+            g2d.drawString("freezes in place.", TEXT_X, THIRD_LINE_Y);
+            g2d.drawString("+1 level (n) each 5 lines ", TEXT_X, FOURTH_LINE_Y);
+            g2d.drawString("cleared.", TEXT_X, FIFTH_LINE_Y);
+            g2d.drawString("+  40(n) = 1 line", TEXT_X, SIXTH_LINE_Y);
+            g2d.drawString("+ 100(n) = 2 lines", TEXT_X, SEVENTH_LINE_Y);
+            g2d.drawString("+ 300(n) = 3 lines", TEXT_X, EIGHTH_LINE_Y);
+            g2d.drawString("+1200(n) = 4 lines", TEXT_X, NINTH_LINE_Y);
 
             myPressToStart = false;
 
@@ -204,7 +255,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
 
 
                     g2d.setPaint(Color.WHITE);
-                    g2d.setStroke(new BasicStroke(1/2));
+                    g2d.setStroke(new BasicStroke(1 / 2));
                     g2d.draw(new Rectangle2D.Double(col * BOARD_OFFSET, row * BOARD_OFFSET,
                             BOARD_OFFSET, BOARD_OFFSET));
 
@@ -219,11 +270,15 @@ public class RedPanel extends JPanel implements PropertyChangeListener
 
                         if (blockRow[j] != null)
                         {
+                            final int transpose = 19;
+
                             g2d.setColor(myPieceToColor.get(blockRow[j].name()));
-                            g2d.fillRect(j * BOARD_OFFSET, (-i + 19) * BOARD_OFFSET, BOARD_OFFSET, BOARD_OFFSET);
+                            g2d.fillRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
+                                    BOARD_OFFSET, BOARD_OFFSET);
                             g2d.setColor(Color.WHITE);
                             g2d.setStroke(new BasicStroke(1));
-                            g2d.drawRect(j * BOARD_OFFSET, (-i + 19) * BOARD_OFFSET, BOARD_OFFSET, BOARD_OFFSET);
+                            g2d.drawRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
+                                    BOARD_OFFSET, BOARD_OFFSET);
                         }
                     }
 
@@ -246,8 +301,9 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         if (myGameOver)
         {
             g2d.setPaint(Color.RED);
-            g2d.setFont(pixelMplus.deriveFont(30f));
-            g2d.drawString("GAME OVER!", (myBoard.getWidth() * 25) / 4, (myBoard.getHeight() * 25) / 2);
+            g2d.setFont(myFont.deriveFont(30f));
+            g2d.drawString("GAME OVER!", (myBoard.getWidth() * BOARD_OFFSET) / PIECE_BLOCKS,
+                    (myBoard.getHeight() * BOARD_OFFSET) / 2);
         }
     }
 
@@ -260,6 +316,8 @@ public class RedPanel extends JPanel implements PropertyChangeListener
     @Override
     public void propertyChange(final PropertyChangeEvent theEvt)
     {
+
+        final int transpose = 19;
 
         if (theEvt.getPropertyName().equals(myBoard.PROPERTY_MOVE)
                 || theEvt.getPropertyName().equals(myBoard.PROPERTY_ROTATED))
@@ -275,7 +333,8 @@ public class RedPanel extends JPanel implements PropertyChangeListener
             for (int i = 0; i < PIECE_BLOCKS; i++)
             {
                 myGamePieces[i].setFrame(((point.x() + coords[i][0])) * BOARD_OFFSET,
-                        (-(point.y() + coords[i][1]) + 19) * BOARD_OFFSET, BOARD_OFFSET, BOARD_OFFSET);
+                        (-(point.y() + coords[i][1]) + transpose) * BOARD_OFFSET, BOARD_OFFSET,
+                        BOARD_OFFSET);
             }
         }
         else if (theEvt.getPropertyName().equals(myBoard.PROPERTY_FREEZE))

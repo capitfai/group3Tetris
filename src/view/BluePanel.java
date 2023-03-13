@@ -69,16 +69,6 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int TIMER_DELAY = 1000;
 
     /**
-     * Size of header text.
-     */
-    private static final int TITLE_SIZE = 25;
-
-    /**
-     * Size of body text.
-     */
-    private static final int BODY_SIZE = 10;
-
-    /**
      * X-coordinate of header text.
      */
     private static final int TITLE_X = 30;
@@ -210,6 +200,41 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int TIMER_ADJUST = 100;
 
     /**
+     * Offsets where rectangle is drawn to capture a border.
+     */
+    private static final int BORDER_OFFSET = 5;
+
+    /**
+     * Offsets Y-coordinate where rectangle is drawn to capture a border.
+     */
+    private static final int BORDER_Y = 150;
+
+    /**
+     * Offset to get border to align with panel.
+     */
+    private static final int BORDER_DRAW_OFFSET = 55;
+
+    /**
+     * Title font size.
+     */
+    private static final int TITLE_FONT_SIZE = 20;
+
+    /**
+     * Centers text.
+     */
+    private static final int STRING_OFFSET = 3;
+
+    /**
+     * Centers longer text.
+     */
+    private static final int DRAW_STRING_OFFSET = 7;
+
+    /**
+     * Text font size.
+     */
+    private static final int TEXT_FONT_SIZE = 10;
+
+    /**
      * Reference of current Board being played on.
      */
     private Board myBoard;
@@ -244,7 +269,10 @@ public class BluePanel extends JPanel implements PropertyChangeListener
      */
     private List<Integer> mySize;
 
-    private Font pixelMplus;
+    /**
+     * Imported font for all text shown in game.
+     */
+    private Font myFont;
 
     /**
      * This constructor sets the layout, background color, and dimensions
@@ -268,12 +296,14 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
         try
         {
-            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
+            myFont = Font.createFont(Font.TRUETYPE_FONT,
                     new File("PixelMplus12-Bold.ttf"));
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("PixelMplus12-Bold.ttf")));
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("PixelMplus12-Bold.ttf")));
         }
-        catch (IOException | FontFormatException e) {
+        catch (final IOException | FontFormatException e)
+        {
         }
     }
 
@@ -293,29 +323,31 @@ public class BluePanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
-        g2d.fillRect(5, 150, WIDTH_DIM - 10, (LENGTH_DIM * 4) - 55);
+        g2d.fillRect(BORDER_OFFSET, BORDER_Y, WIDTH_DIM - TEXT_X,
+                (LENGTH_DIM * PIECE_POINTS) - BORDER_DRAW_OFFSET);
 
         g2d.setPaint(Color.YELLOW);
-        g2d.setFont(pixelMplus.deriveFont(20f));
+        g2d.setFont(myFont.deriveFont(20f));
         g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 
         g2d.setPaint(Color.WHITE);
-        g2d.setFont(pixelMplus.deriveFont(10f));
+        g2d.setFont(myFont.deriveFont(10f));
 
-        g2d.drawString("W, w, ^  CW", LENGTH_DIM / 2 - 3, CW_Y);
+        g2d.drawString("W, w, ^  CW", LENGTH_DIM / 2 - STRING_OFFSET, CW_Y);
         g2d.drawString("E, e, CCW", LENGTH_DIM / 2, CCW_Y);
-        g2d.drawString("D, d, >, RIGHT", LENGTH_DIM / 2 - 7, RIGHT_Y);
-        g2d.drawString("A, a, <, LEFT ", LENGTH_DIM / 2 - 5, LEFT_Y);
-        g2d.drawString("S, s, |, DOWN ", LENGTH_DIM / 2 - 5, DOWN_Y);
+        g2d.drawString("D, d, >, RIGHT", LENGTH_DIM / 2 - DRAW_STRING_OFFSET, RIGHT_Y);
+        g2d.drawString("A, a, <, LEFT ", LENGTH_DIM / 2 - BORDER_OFFSET, LEFT_Y);
+        g2d.drawString("S, s, |, DOWN ", LENGTH_DIM / 2 - BORDER_OFFSET, DOWN_Y);
         g2d.drawString("Space, DROP ", LENGTH_DIM / 2, DROP_Y);
         g2d.drawString("P, p, Pause", LENGTH_DIM / 2, PAUSE_Y);
-        g2d.drawString("U, u, Unpause", LENGTH_DIM / 2 - 5, UNPAUSE_Y);
+        g2d.drawString("U, u, Unpause", LENGTH_DIM / 2 - BORDER_OFFSET, UNPAUSE_Y);
         g2d.drawString("2, End Game", LENGTH_DIM / 2, END_Y);
 
         g2d.drawString("SCORE: " + myScore, LENGTH_DIM / 2, SCORE_Y);
-        g2d.drawString("LINES CLEARED: " + myLines, LENGTH_DIM / 3, LINES_CLEAR);
+        g2d.drawString("LINES CLEARED: " + myLines, LENGTH_DIM / STRING_OFFSET, LINES_CLEAR);
         g2d.drawString("LEVEL: " + myLevel, LENGTH_DIM / 2, LEVEL_Y);
-        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES", LENGTH_DIM / 5 - 2, NEXT_LEVEL_Y);
+        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES",
+                LENGTH_DIM / BORDER_OFFSET - 2, NEXT_LEVEL_Y);
 
     }
 

@@ -24,7 +24,8 @@ import controls.BoardControls;
  *
  * @version Winter 2023
  */
-public class Window extends JFrame {
+public class Window extends JFrame
+{
     // FIELDS
 
     /**
@@ -46,11 +47,6 @@ public class Window extends JFrame {
      * Milliseconds between each call to timer.
      */
     private static final int TIMER_DELAY = 1000;
-
-    /**
-     * Timer that controls how game functions.
-     */
-    protected static Timer myTimer;
 
     /**
      * This is a red panel object.
@@ -85,12 +81,17 @@ public class Window extends JFrame {
     /**
      * Keeps track of whether the game has been paused or not.
      */
-    private boolean gameInProgress;
+    private boolean myGameInProgress;
 
     /**
      * Keeps track of whether the game can be started again or not.
      */
-    private boolean pressToStart;
+    private boolean myPressToStart;
+
+    /**
+     * Timer that controls how game functions.
+     */
+    protected static Timer myTimer;
 
     // CONSTRUCTORS
 
@@ -98,15 +99,16 @@ public class Window extends JFrame {
      * This constructor sets the name, layout, and visibility of the frame.
      * It also adds the 3 (red, blue, and green) panels to the frame.
      */
-    public Window(final BoardControls theBoard) {
+    public Window(final BoardControls theBoard)
+    {
         super();
         myBoard = theBoard;
         myBoard.newGame();
 
         myFileMenu = new FileMenu();
 
-        gameInProgress = false;
-        pressToStart = true;
+        myGameInProgress = false;
+        myPressToStart = true;
 
         myWindow = new JFrame(NAME);
         myWindow.setLayout(new BorderLayout());
@@ -122,10 +124,13 @@ public class Window extends JFrame {
         myWindow.setVisible(true);
 
         myTimer = new Timer(TIMER_DELAY, null);
-        myTimer.addActionListener(new ActionListener() {
+        myTimer.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(final ActionEvent theEve) {
-                if (myTimer.isRunning()) {
+            public void actionPerformed(final ActionEvent theEve)
+            {
+                if (myTimer.isRunning())
+                {
                     myBoard.step();
                 }
             }
@@ -142,56 +147,74 @@ public class Window extends JFrame {
 
     }
 
-    class BoardKeyListener extends KeyAdapter {
+    class BoardKeyListener extends KeyAdapter
+    {
         @Override
-        public void keyPressed(final KeyEvent theEvent) {
+        public void keyPressed(final KeyEvent theEvent)
+        {
 
-            if(pressToStart) {
+            if (myPressToStart)
+            {
                 if (theEvent.getKeyCode() == KeyEvent.VK_1) // start the game
                 {
                     myTimer.start();
-                    gameInProgress = true; // game has started, control the pieces
-                    pressToStart = false;
+                    myGameInProgress = true; // game has started, control the pieces
+                    myPressToStart = false;
                 }
             }
 
             else if (theEvent.getKeyCode() == KeyEvent.VK_P) // pause the game
             {
-                if (myTimer.isRunning()) {
+                if (myTimer.isRunning())
+                {
                     myTimer.stop();
-                    gameInProgress = false; // no controlling the piece
+                    myGameInProgress = false; // no controlling the piece
                 }
-            } else if (theEvent.getKeyCode() == KeyEvent.VK_U) // unpause the game
+            }
+            else if (theEvent.getKeyCode() == KeyEvent.VK_U) // unpause the game
             {
-                if (!myTimer.isRunning()) {
+                if (!myTimer.isRunning())
+                {
                     myTimer.start();
-                    gameInProgress = true; // can control the piece
+                    myGameInProgress = true; // can control the piece
                 }
             }
 
-            if (gameInProgress) {
+            if (myGameInProgress)
+            {
                 if (theEvent.getKeyCode() == KeyEvent.VK_A
-                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
+                {
                     myBoard.left();
-                } else if (theEvent.getKeyCode() == KeyEvent.VK_D
-                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_D
+                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
+                {
                     myBoard.right();
-                } else if (theEvent.getKeyCode() == KeyEvent.VK_W
-                        || theEvent.getKeyCode() == KeyEvent.VK_UP) {
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_W
+                        || theEvent.getKeyCode() == KeyEvent.VK_UP)
+                {
                     myBoard.rotateCW();
-                } else if (theEvent.getKeyCode() == KeyEvent.VK_E) {
-                        myBoard.rotateCCW();
-                } else if (theEvent.getKeyCode() == KeyEvent.VK_S
-                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN) {
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_E)
+                {
+                    myBoard.rotateCCW();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_S
+                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
+                {
                     myBoard.down();
-                } else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
+                {
                     myBoard.drop();
                 }
 
-                else if(theEvent.getKeyCode() == KeyEvent.VK_2)
+                else if (theEvent.getKeyCode() == KeyEvent.VK_2)
                 {
                     myBoard.setGameOver();
-                    gameInProgress = false;
+                    myGameInProgress = false;
                     myTimer.stop();
                 }
             }
