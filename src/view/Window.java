@@ -5,13 +5,13 @@
  */
 package view;
 
+import controls.BoardControls;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import controls.BoardControls;
 
 /**
  * This object represents the upper-most frame of the GUI and lists
@@ -27,6 +27,11 @@ import controls.BoardControls;
 public class Window extends JFrame
 {
     // FIELDS
+
+    /**
+     * Timer that controls how game functions.
+     */
+    protected static Timer myTimer;
 
     /**
      * This represents the name of the frame.
@@ -71,7 +76,7 @@ public class Window extends JFrame
     /**
      * File menu at top of window.
      */
-    private FileMenu myFileMenu;
+    private FileMenu myFileMenu = new FileMenu();
 
     /**
      * This represents a Board Object of the model package.
@@ -88,11 +93,6 @@ public class Window extends JFrame
      */
     private boolean myPressToStart;
 
-    /**
-     * Timer that controls how game functions.
-     */
-    protected static Timer myTimer;
-
     // CONSTRUCTORS
 
     /**
@@ -104,8 +104,6 @@ public class Window extends JFrame
         super();
         myBoard = theBoard;
         myBoard.newGame();
-
-        myFileMenu = new FileMenu();
 
         myGameInProgress = false;
         myPressToStart = true;

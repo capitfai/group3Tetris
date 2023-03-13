@@ -5,10 +5,7 @@
  */
 package view;
 
-import model.Board;
-import model.Rotation;
-import model.TetrisPiece;
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -17,6 +14,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.swing.JPanel;
+import model.Board;
+import model.Rotation;
+import model.TetrisPiece;
 
 /**
  * This object represents a panel holding the next tetris piece
@@ -57,11 +58,6 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final int SET_FRAME = 25;
 
     /**
-     * Contains value of header font size.
-     */
-    private static final int HEADER_SIZE = 20;
-
-    /**
      * X-coordinate of text.
      */
     private static final int TEXT_X = 20;
@@ -92,19 +88,24 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final int BORDER_DRAW_OFFSET = 10;
 
     /**
+     * The name of the file for the Font name.
+     */
+    private static final String MY_FILE_NAME = "PixelMplus12-Bold.ttf";
+
+    /**
      * This object is a board object from the model package.
      */
-    private final Board myBoard;
+    private final Board myBoard = new Board();
 
     /**
      * Holds the shape of specific tetris piece to be drawn.
      */
-    private final Rectangle2D[] myGamePieces;
+    private final Rectangle2D[] myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
     /**
      * Holds color of specific tetris piece to be drawn.
      */
-    private final Map<String, Color> myPieceToColor;
+    private final Map<String, Color> myPieceToColor = new TreeMap<>();
 
     /**
      * Holds the tetris piece that will next be played.
@@ -114,7 +115,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * Imported font for gameplay info.
      */
-    private Font pixelMplus;
+    private Font myPixelMplus;
 
     /**
      * This constructor sets the layout, background color, and dimensions
@@ -122,30 +123,17 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      */
     public GreenPanel()
     {
-        myBoard = new Board();
-        myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
-        setLayout(new BorderLayout());
-        setBackground(COLOR);
-        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
-
-        myPieceToColor = new TreeMap<>();
-
-        myPieceToColor.put("I", Color.CYAN);
-        myPieceToColor.put("J", Color.BLUE);
-        myPieceToColor.put("L", Color.ORANGE);
-        myPieceToColor.put("O", Color.YELLOW);
-        myPieceToColor.put("S", Color.GREEN);
-        myPieceToColor.put("T", Color.PINK);
-        myPieceToColor.put("Z", Color.RED);
+        setUpPanel();
+        setUpColors();
 
         try
         {
-            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf"));
+            myPixelMplus = Font.createFont(Font.TRUETYPE_FONT,
+                    new File(MY_FILE_NAME));
             final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf")));
+                    new File(MY_FILE_NAME)));
         }
         catch (final IOException | FontFormatException e)
         {
@@ -208,7 +196,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 WIDTH_DIM - BORDER_DRAW_OFFSET, LENGTH_DIM - BORDER_DRAW_OFFSET);
 
         g2d.setPaint(Color.BLUE);
-        g2d.setFont(pixelMplus.deriveFont(20f));
+        g2d.setFont(myPixelMplus.deriveFont(20f));
         g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
         if (myTetrisPiece != null)
@@ -224,5 +212,30 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         }
     }
 
+    /**
+     * This method sets up the Panel's BorderLayout, Background Color,
+     * and Size.
+     */
+    private void setUpPanel()
+    {
+        setLayout(new BorderLayout());
+        setBackground(COLOR);
+        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
+    }
+
+    /**
+     * This method assigns Strings (which represent Blocks)
+     * certain colors.
+     */
+    private void setUpColors()
+    {
+        myPieceToColor.put("I", Color.CYAN);
+        myPieceToColor.put("J", Color.BLUE);
+        myPieceToColor.put("L", Color.ORANGE);
+        myPieceToColor.put("O", Color.YELLOW);
+        myPieceToColor.put("S", Color.GREEN);
+        myPieceToColor.put("T", Color.PINK);
+        myPieceToColor.put("Z", Color.RED);
+    }
 
 }

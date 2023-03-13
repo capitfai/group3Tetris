@@ -6,21 +6,22 @@
 package view;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
-import javax.swing.*;
-import model.Board;
-import model.Point;
-import model.TetrisPiece;
-import model.MovableTetrisPiece;
-import model.Rotation;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.swing.JPanel;
 import model.Block;
-
+import model.Board;
+import model.MovableTetrisPiece;
+import model.Point;
+import model.Rotation;
+import model.TetrisPiece;
 
 /**
  * This object represents a red panel of the GUI.
@@ -111,24 +112,29 @@ public class RedPanel extends JPanel implements PropertyChangeListener
     private static final int NINTH_LINE_Y = 435;
 
     /**
+     * The name of the file for the Font name.
+     */
+    private static final String MY_FILE_NAME = "PixelMplus12-Bold.ttf";
+
+    /**
      * This object represents a board object from package model.
      */
-    private final Board myBoard;
+    private final Board myBoard = new Board();
 
     /**
      * Contains specific piece and color they will represent.
      */
-    private final Map<String, Color> myPieceToColor;
+    private final Map<String, Color> myPieceToColor = new TreeMap<>();
 
     /**
      * List that holds all the compounded frozen blocks.
      */
-    private List<Block[]> myFrozenBlocks;
+    private List<Block[]> myFrozenBlocks = new LinkedList<>();
 
     /**
      * Contains all tetris pieces.
      */
-    private final Rectangle2D[] myGamePieces;
+    private final Rectangle2D[] myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
     /**
      * Variable tells whether game is over.
@@ -156,25 +162,16 @@ public class RedPanel extends JPanel implements PropertyChangeListener
      */
     public RedPanel()
     {
-        myBoard = new Board();
-        setLayout(new BorderLayout());
-        setBackground(COLOR);
-        setPreferredSize(new Dimension(myBoard.getWidth() * BOARD_OFFSET,
-                myBoard.getHeight() * BOARD_OFFSET));
-        myGamePieces = new Rectangle2D[PIECE_BLOCKS];
-        myPieceToColor = new TreeMap<>();
-        myFrozenBlocks = new LinkedList<Block[]>();
-
-        myGameOver = false;
-        myPressToStart = true;
+        setUpPanel();
+        setUpColors();
 
         try
         {
             myFont = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf"));
+                    new File(MY_FILE_NAME));
             final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf")));
+                    new File(MY_FILE_NAME)));
         }
         catch (final IOException | FontFormatException e)
         {
@@ -184,18 +181,10 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         {
             myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
         }
-
         for (int h = 0; h < myBoard.getHeight(); h++)
         {
             myFrozenBlocks.add(new Block[myBoard.getWidth()]);
         }
-        myPieceToColor.put("I", Color.CYAN);
-        myPieceToColor.put("J", Color.BLUE);
-        myPieceToColor.put("L", Color.ORANGE);
-        myPieceToColor.put("O", Color.YELLOW);
-        myPieceToColor.put("S", Color.GREEN);
-        myPieceToColor.put("T", Color.PINK);
-        myPieceToColor.put("Z", Color.RED);
     }
 
     /**
@@ -210,7 +199,6 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         super.paintComponent(theGraphics);
         final Graphics2D g2d = (Graphics2D) theGraphics;
 
-        // for better graphics display
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -234,7 +222,8 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                     / textXOffset, SUBHEADING_Y);
 
             g2d.setFont(myFont.deriveFont(13f));
-            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * TEXT_SIZING) / scoringX, FIRST_LINE_Y);
+            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * TEXT_SIZING) / scoringX,
+                    FIRST_LINE_Y);
             g2d.drawString("+4 points when a piece", TEXT_X, SECOND_LINE_Y);
             g2d.drawString("freezes in place.", TEXT_X, THIRD_LINE_Y);
             g2d.drawString("+1 level (n) each 5 lines ", TEXT_X, FOURTH_LINE_Y);
@@ -245,20 +234,17 @@ public class RedPanel extends JPanel implements PropertyChangeListener
             g2d.drawString("+1200(n) = 4 lines", TEXT_X, NINTH_LINE_Y);
 
             myPressToStart = false;
-
         }
         else
+        {
             for (int row = 0; row < myBoard.getHeight(); row++)
             {
                 for (int col = 0; col < myBoard.getWidth(); col++)
                 {
-
-
                     g2d.setPaint(Color.WHITE);
                     g2d.setStroke(new BasicStroke(1 / 2));
                     g2d.draw(new Rectangle2D.Double(col * BOARD_OFFSET, row * BOARD_OFFSET,
                             BOARD_OFFSET, BOARD_OFFSET));
-
                 }
 
                 for (int i = myFrozenBlocks.size() - 1; i >= 0; i--)
@@ -267,7 +253,6 @@ public class RedPanel extends JPanel implements PropertyChangeListener
 
                     for (int j = 0; j < blockRow.length; j++)
                     {
-
                         if (blockRow[j] != null)
                         {
                             final int transpose = 19;
@@ -281,7 +266,6 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                                     BOARD_OFFSET, BOARD_OFFSET);
                         }
                     }
-
                 }
 
                 if (myTetrisPiece != null)
@@ -297,6 +281,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                 }
 
             }
+        }
 
         if (myGameOver)
         {
@@ -360,8 +345,33 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         }
 
         repaint();
-
-
     }
+
+    private void setUpPanel()
+    {
+        setLayout(new BorderLayout());
+        setBackground(COLOR);
+        setPreferredSize(new Dimension(myBoard.getWidth() * BOARD_OFFSET,
+                myBoard.getHeight() * BOARD_OFFSET));
+
+        myGameOver = false;
+        myPressToStart = true;
+    }
+
+    /**
+     * This method assigns Strings (which represent Blocks)
+     * certain colors.
+     */
+    private void setUpColors()
+    {
+        myPieceToColor.put("I", Color.CYAN);
+        myPieceToColor.put("J", Color.BLUE);
+        myPieceToColor.put("L", Color.ORANGE);
+        myPieceToColor.put("O", Color.YELLOW);
+        myPieceToColor.put("S", Color.GREEN);
+        myPieceToColor.put("T", Color.PINK);
+        myPieceToColor.put("Z", Color.RED);
+    }
+
 
 }
