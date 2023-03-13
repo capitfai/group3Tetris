@@ -25,3 +25,17 @@ Link to Meeting Minutes: https://docs.google.com/document/d/15f6RJXX8kMjsD0ToOih
 
 ### Sprint 2 Comments
 We hope PropertyChangeListeners and KeyAdapters are somewhat correct as they do respond to each other but do not yet follow behaviors we want them to take.
+
+
+### Sprint 3 Contributions
+- Faith: Visually enhanced the panels to represent a classic arcade-like version of Tetris.
+- Avreen: Implemented and worked out the logic behind the game board such as drawing/animating the pieces and handling the informational panels.
+- Sullivan: Work out the logic to implement different levels in Tetris game.
+- Josh: Ensure implented classes properly model a Observer Design Pattern.
+
+### Sprint 3 Meetings
+Link to Meeting Minutes: https://docs.google.com/document/d/15f6RJXX8kMjsD0ToOihwurH-tNYxQHva_NXm1pcW0CA/edit?usp=sharing
+
+### Sprint 3 Comments
+Resources:
+- PixelMPlus font that represents classic 12-bit feel (https://itouhiro.hatenablog.com/entry/20130602/font)
