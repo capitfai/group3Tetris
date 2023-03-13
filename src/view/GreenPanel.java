@@ -57,11 +57,6 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final int SET_FRAME = 25;
 
     /**
-     * Contains value of header font size.
-     */
-    private static final int HEADER_SIZE = 20;
-
-    /**
      * X-coordinate of text.
      */
     private static final int TEXT_X = 20;
