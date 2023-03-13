@@ -31,7 +31,7 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     /**
      * This represents the color of the panel.
      */
-    private static final Color COLOR = new Color(150, 100, 150);
+    private static final Color COLOR = Color.WHITE;
 
     /**
      * This represents the width of the panel.
@@ -81,7 +81,7 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     /**
      * X-coordinate of header text.
      */
-    private static final int TITLE_X = 25;
+    private static final int TITLE_X = 30;
 
     /**
      * Y-coordinate of header text.
@@ -141,22 +141,22 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     /**
      * Y-coordinate of score.
      */
-    private static final int SCORE_Y = 335;
+    private static final int SCORE_Y = 350;
 
     /**
      * Y-coordinate of lines cleared text.
      */
-    private static final int LINES_CLEAR = 350;
+    private static final int LINES_CLEAR = 365;
 
     /**
      * Y-coordinate of current level text.
      */
-    private static final int LEVEL_Y = 365;
+    private static final int LEVEL_Y = 380;
 
     /**
      * Y-coordinate of next level text.
      */
-    private static final int NEXT_LEVEL_Y = 380;
+    private static final int NEXT_LEVEL_Y = 395;
 
     /**
      * Base amount of points scored when piece is placed.
@@ -293,25 +293,29 @@ public class BluePanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
+        g2d.fillRect(5, 150, WIDTH_DIM - 10, (LENGTH_DIM * 4) - 55);
+
+        g2d.setPaint(Color.YELLOW);
         g2d.setFont(pixelMplus.deriveFont(20f));
         g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 
-        g2d.setFont(pixelMplus.deriveFont(13f));
+        g2d.setPaint(Color.WHITE);
+        g2d.setFont(pixelMplus.deriveFont(10f));
 
-        g2d.drawString("W, w, ^  CW", TEXT_X, CW_Y);
-        g2d.drawString("E, e, CCW", TEXT_X, CCW_Y);
-        g2d.drawString("D, d, >, RIGHT", TEXT_X, RIGHT_Y);
-        g2d.drawString("A, a, <, LEFT ", TEXT_X, LEFT_Y);
-        g2d.drawString("S, s, |, DOWN ", TEXT_X, DOWN_Y);
-        g2d.drawString("Space, DROP ", TEXT_X, DROP_Y);
-        g2d.drawString("P, p, Pause", TEXT_X, PAUSE_Y);
-        g2d.drawString("U, u, Unpause", TEXT_X, UNPAUSE_Y);
-        g2d.drawString("2, End Game", TEXT_X, END_Y);
+        g2d.drawString("W, w, ^  CW", LENGTH_DIM / 2 - 3, CW_Y);
+        g2d.drawString("E, e, CCW", LENGTH_DIM / 2, CCW_Y);
+        g2d.drawString("D, d, >, RIGHT", LENGTH_DIM / 2 - 7, RIGHT_Y);
+        g2d.drawString("A, a, <, LEFT ", LENGTH_DIM / 2 - 5, LEFT_Y);
+        g2d.drawString("S, s, |, DOWN ", LENGTH_DIM / 2 - 5, DOWN_Y);
+        g2d.drawString("Space, DROP ", LENGTH_DIM / 2, DROP_Y);
+        g2d.drawString("P, p, Pause", LENGTH_DIM / 2, PAUSE_Y);
+        g2d.drawString("U, u, Unpause", LENGTH_DIM / 2 - 5, UNPAUSE_Y);
+        g2d.drawString("2, End Game", LENGTH_DIM / 2, END_Y);
 
-        g2d.drawString("SCORE: " + myScore, TEXT_X, SCORE_Y);
-        g2d.drawString("LINES CLEARED: " + myLines, TEXT_X, LINES_CLEAR);
-        g2d.drawString("LEVEL: " + myLevel, TEXT_X, LEVEL_Y);
-        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES.", TEXT_X, NEXT_LEVEL_Y);
+        g2d.drawString("SCORE: " + myScore, LENGTH_DIM / 2, SCORE_Y);
+        g2d.drawString("LINES CLEARED: " + myLines, LENGTH_DIM / 3, LINES_CLEAR);
+        g2d.drawString("LEVEL: " + myLevel, LENGTH_DIM / 2, LEVEL_Y);
+        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES", LENGTH_DIM / 5 - 2, NEXT_LEVEL_Y);
 
     }
 

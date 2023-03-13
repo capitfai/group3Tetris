@@ -34,7 +34,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * This represents the color of the panel.
      */
-    private static final Color COLOR = new Color(190, 120, 150);
+    private static final Color COLOR = Color.WHITE;
 
     /**
      * This represents the width of the panel.
@@ -69,7 +69,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * Y-coordinate of text.
      */
-    private static final int TEXT_Y = 25;
+    private static final int TEXT_Y = 30;
 
     /**
      * Offset value for calculating piece points.
@@ -192,6 +192,10 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setPaint(Color.BLACK);
+        g2d.fillRect(5, 5,
+                WIDTH_DIM - 10, LENGTH_DIM - 10);
+
+        g2d.setPaint(Color.BLUE);
         g2d.setFont(pixelMplus.deriveFont(20f));
         g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
@@ -201,7 +205,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
             {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
-                g2d.setColor(Color.BLACK);
+                g2d.setColor(Color.WHITE);
                 g2d.setStroke(new BasicStroke(1));
                 g2d.draw(myGamePieces[i]);
             }
