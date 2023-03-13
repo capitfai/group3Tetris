@@ -40,6 +40,8 @@ Link to Meeting Minutes: https://docs.google.com/document/d/15f6RJXX8kMjsD0ToOih
 Resources:
 - PixelMPlus font that represents classic 12-bit feel (https://itouhiro.hatenablog.com/entry/20130602/font)
 
+Code Weirdness: Checkstyle flags most classes for having incorrect import syntax and order regardless of how I try to fix it. Alphabetically and by example code syntax, it should be correct. Magic numbers in the deriveFont method in my custom font, by syntax, has to be done that way and is getting flagged. 
+
 ### Required Line Locations
 
 *Location that determines how many more lines until next level and class that contains scoring algorithm*
@@ -47,3 +49,4 @@ View class "bluePanel", line 387
 
 *Change in Board class that allows us to set myGameOver to false*
 Model class "Board", setGameOver() method is changed with property change support to be able to set our instance field in GUI.
+
