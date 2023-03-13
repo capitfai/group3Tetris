@@ -1,48 +1,50 @@
+/*
+ * Final Project
+ *
+ * Winter 2023
+ */
 package view;
 
-import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.*;
+import model.Board;
 
 /**
  * This is program is a JMenuBar containing a file menu for a tetris game.
  *
- * @author Sullivan Lucier-Benson
+ * @author Avreen Kaur
+ * @author Faith Capito
+ * @author Sullivan Seamus Lucier-Benson
  * @author Josh Chang
- * @version Winter 2023
  *
+ * @version Winter 2023
  */
-public class FileMenu extends JMenuBar {
+public class FileMenu extends JMenuBar implements PropertyChangeListener
+{
 
     /**
      * The text message that appears when the button "About" is called.
      */
-    private static final String TEXT_ABOUT_MSG = "Test.";
-
-    /**
-     * The represents the width of the frame.
-     */
-    private static final int FRAME_WIDTH = 500;
-
-    /**
-     * The represents the height of the frame.
-     */
-    private static final int FRAME_HEIGHT = 500;
+    private static final String TEXT_ABOUT_MSG = "Winter 2023: By Avreen, Faith, "
+                                                + "Josh and Sullivan\nFont imported from public site:"
+            + "\nhttps://itouhiro.hatenablog.com/entry/20130602/font";
 
     /**
      * The represents the width of the About file menu item.
      */
-    private static final int ABOUT_WIDTH = 100;
+    private static final int ABOUT_WIDTH = 300;
 
     /**
      * The represents the height of the About file menu item.
      */
-    private static final int ABOUT_HEIGHT = 100;
+    private static final int ABOUT_HEIGHT = 300;
 
     /**
      * The represents the width of the text.
      */
-    private static final int TEXT_WIDTH = 50;
+    private static final int TEXT_WIDTH = 150;
 
     /**
      * The represents the height of the text.
@@ -75,18 +77,27 @@ public class FileMenu extends JMenuBar {
     private boolean myGameState;
 
     /**
+     * This represents the Tetris game board.
+     */
+    private Board myBoard;
+
+    /**
      * This constructor constructs the file menu bar.
      */
-    public FileMenu() {
+    public FileMenu()
+    {
         super();
         buildComponents();
         addEvents();
-
+        myBoard = new Board();
+        myGameState = false;
     }
+
     /**
      * Sets up the new JMenu and JMenuItems for the new JMenuBar.
      */
-    private void buildComponents() {
+    private void buildComponents()
+    {
         //Creates new JMenu
         myFileMenu = new JMenu("File");
 
@@ -106,39 +117,49 @@ public class FileMenu extends JMenuBar {
     /**
      * Sets up the event listeners for newGame, exit, and about.
      */
-    private void addEvents() {
+    private void addEvents()
+    {
         //Sets the text area field for the "About" menu item,
         // to show a description of this program
-        myAbout.addActionListener(new ActionListener() {
+        myAbout.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(final ActionEvent theE) {
+            public void actionPerformed(final ActionEvent theE)
+            {
                 final JFrame about = new JFrame();
                 final JTextArea text = new JTextArea(TEXT_ABOUT_MSG);
                 text.setEditable(false);
                 text.setSize(TEXT_WIDTH, TEXT_HEIGHT);
                 about.setLocationRelativeTo(null);
                 about.setVisible(true);
-                about.setSize(ABOUT_WIDTH, ABOUT_HEIGHT);
+                about.setSize(ABOUT_WIDTH , ABOUT_HEIGHT);
                 about.add(text);
             }
         });
         //
-        myExit.addActionListener(new ActionListener() {
+        myExit.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(final ActionEvent theE) {
+            public void actionPerformed(final ActionEvent theE)
+            {
                 System.exit(1);
             }
         });
         //
-        myNewGame.addActionListener(new ActionListener() {
+        myNewGame.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(final ActionEvent theE) {
-
-                if (myGameState) { // game is not in progress
-                    // start new game
-                } else {
+            public void actionPerformed(final ActionEvent theE)
+            {
+                if (myGameState)
+                {
+                    new Window(new Board());
+                    myGameState = false;
+                    myNewGame.setEnabled(true);
+                }
+                else
+                {
                     //Disable myNewGame JMenuItem, if game is already in progress
-                    myNewGame.setEnabled(false);
                     JOptionPane.showMessageDialog(null,
                             "Game is already in progress."
                                     + " Finish the current game before starting a new one.",
@@ -149,17 +170,17 @@ public class FileMenu extends JMenuBar {
     }
 
     /**
+     * Listens to whether or not the game is over.
      *
-     * @param theArgs
+     * @param theEvt A PropertyChangeEvent object describing the event source
+     *          and the property that has changed.
      */
-    public static void main(final String[] theArgs) {
-        final JMenuBar newFileMenu = new FileMenu();
-        final JFrame frame = new JFrame("Menu");
-        frame.setLocationRelativeTo(null);
-        frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
-        frame.setVisible(true);
-        frame.setJMenuBar(newFileMenu);
+    @Override
+    public void propertyChange(final PropertyChangeEvent theEvt)
+    {
+        if (theEvt.getPropertyName().equals(myBoard.PROPERTY_OVER))
+        {
+            myGameState = true;
+        }
     }
 }
