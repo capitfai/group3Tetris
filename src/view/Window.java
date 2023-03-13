@@ -171,31 +171,6 @@ public class Window extends JFrame
     private class BoardKeyListener extends KeyAdapter
     {
 
-        /**
-         * Contains mapping of possible keys to interact with.
-         */
-        private final Map<Integer, Runnable> myKeyMap;
-
-        BoardKeyListener()
-        {
-            myKeyMap = new HashMap<>();
-            mapKeys();
-        }
-
-        private void mapKeys()
-        {
-            myKeyMap.put(KeyEvent.VK_DOWN, myBoard::down);
-            myKeyMap.put(KeyEvent.VK_S, () -> myBoard.down());
-            myKeyMap.put(KeyEvent.VK_RIGHT, () -> myBoard.right());
-            myKeyMap.put(KeyEvent.VK_D, () -> myBoard.right());
-            myKeyMap.put(KeyEvent.VK_LEFT, () -> myBoard.left());
-            myKeyMap.put(KeyEvent.VK_A, () -> myBoard.left());
-            myKeyMap.put(KeyEvent.VK_SPACE, () -> myBoard.drop());
-            myKeyMap.put(KeyEvent.VK_UP, () -> myBoard.rotateCW());
-            myKeyMap.put(KeyEvent.VK_W, () -> myBoard.rotateCW());
-            myKeyMap.put(KeyEvent.VK_E, () -> myBoard.rotateCCW());
-        }
-
         @Override
         public void keyPressed(final KeyEvent theEvent)
         {
