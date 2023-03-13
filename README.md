@@ -40,6 +40,11 @@ Link to Meeting Minutes: https://docs.google.com/document/d/15f6RJXX8kMjsD0ToOih
 Resources:
 - PixelMPlus font that represents classic 12-bit feel (https://itouhiro.hatenablog.com/entry/20130602/font)
 
+Extra Features:
+- Specially imported font to visually enhance the text of our game!
+- Extra key listener to end the game by pressing 2!
+- UW-"T" (get it?) Tetris piece that is the official RGB value of UW purple!
+
 Code Weirdness: Checkstyle flags most classes for having incorrect import syntax and order regardless of how I try to fix it. Alphabetically and by example code syntax, it should be correct. Magic numbers in the deriveFont method in my custom font, by syntax, has to be done that way and is getting flagged. 
 
 **Last minute submission update: Our group was able to submit 100% working code before the deadline (woohoo!) but ran into git issues that we then stumbled into more code complications with. For our own satisfaction we re-merged for the sake of good-looking, well documented code in hopes that you prefer to see it that way. Alas!!! We understand that a deadline is a deadline and have our original sprint3 > master branch merges previously submitted. Thank you!**
@@ -47,7 +52,7 @@ Code Weirdness: Checkstyle flags most classes for having incorrect import syntax
 ### Required Line Locations
 
 *Location that determines how many more lines until next level and class that contains scoring algorithm*
-View class "bluePanel", line 387
+View class "bluePanel", line 415
 
 *Change in Board class that allows us to set myGameOver to false*
 Model class "Board", setGameOver() method is changed with property change support to be able to set our instance field in GUI.
