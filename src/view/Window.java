@@ -10,9 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.security.Key;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.*;
 import controls.BoardControls;
 
@@ -109,8 +106,6 @@ public class Window extends JFrame
         myBoard = theBoard;
         myBoard.newGame();
 
-        myGameInProgress = false;
-        myPressToStart = true;
         setUpComponents();
         setTimer();
         addListeners();
@@ -119,8 +114,14 @@ public class Window extends JFrame
 
     }
 
-    public void setUpComponents()
+    /**
+     * Sets up components in the window.
+     */
+    private void setUpComponents()
     {
+
+        myGameInProgress = false;
+        myPressToStart = true;
 
         myFileMenu = new FileMenu();
 
@@ -141,7 +142,10 @@ public class Window extends JFrame
         myWindow.requestFocus();
     }
 
-    public void setTimer()
+    /**
+     * Sets the initial timer to be ticking through game.
+     */
+    private void setTimer()
     {
 
         myTimer = new Timer(TIMER_DELAY, null);
@@ -158,7 +162,10 @@ public class Window extends JFrame
         });
     }
 
-    public void addListeners()
+    /**
+     * Adds listeners to each panel and the file menu in window.
+     */
+    private void addListeners()
     {
 
         myBoard.addPropertyChangeListener(myRed);
@@ -168,9 +175,16 @@ public class Window extends JFrame
 
     }
 
+    /**
+     * Class that implements key listeners for specific actions to those keys.
+     */
     private class BoardKeyListener extends KeyAdapter
     {
 
+        /**
+         * Cycles through what action corresponds to which key pressed.
+         * @param theEvent the event to be processed
+         */
         @Override
         public void keyPressed(final KeyEvent theEvent)
         {

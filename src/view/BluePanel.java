@@ -279,17 +279,13 @@ public class BluePanel extends JPanel implements PropertyChangeListener
         setUpComponents();
         myBoard = new Board();
         setUpFont();
-
-        mySize = new ArrayList<>();
-        myScore = DEFAULT_SCORE;
-        myLines = DEFAULT_LINES;
-        myLevel = DEFAULT_LEVEL;
-        myNextLevel = NEXT_LEVEL;
-
-        myDelay = TIMER_DELAY;
+        setUpDisplayInfo();
 
     }
 
+    /**
+     * This method sets up the panel's layout, background color and size.
+     */
     public void setUpComponents()
     {
 
@@ -299,6 +295,24 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
     }
 
+    /**
+     * Initializes information necessary to display to user while
+     * in game like score, lined cleared, level, lines until next level
+     * and speed of timer.
+     */
+    public void setUpDisplayInfo()
+    {
+        myScore = DEFAULT_SCORE;
+        myLines = DEFAULT_LINES;
+        myLevel = DEFAULT_LEVEL;
+        myNextLevel = NEXT_LEVEL;
+
+        myDelay = TIMER_DELAY;
+    }
+
+    /**
+     * Sets up custom font to be used in panel.
+     */
     public void setUpFont()
     {
         try

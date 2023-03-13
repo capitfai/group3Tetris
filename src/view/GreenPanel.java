@@ -42,11 +42,6 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final Color UW_PURPLE = new Color(51, 0, 111);
 
     /**
-     * Official UW gold to outline the pieces.
-     */
-    private static final Color UW_GOLD = new Color(232, 211, 162);
-
-    /**
      * This represents the width of the panel.
      */
     private static final int WIDTH_DIM = 150;
@@ -99,17 +94,17 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * This object is a board object from the model package.
      */
-    private final Board myBoard;
+    private final Board myBoard = new Board();
 
     /**
      * Holds the shape of specific tetris piece to be drawn.
      */
-    private final Rectangle2D[] myGamePieces;
+    private final Rectangle2D[] myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
     /**
      * Holds color of specific tetris piece to be drawn.
      */
-    private final Map<String, Color> myPieceToColor;
+    private final Map<String, Color> myPieceToColor = new TreeMap<>();
 
     /**
      * Holds the tetris piece that will next be played.
@@ -119,7 +114,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     /**
      * Imported font for gameplay info.
      */
-    private Font pixelMplus;
+    private Font myFont;
 
     /**
      * This constructor sets the layout, background color, and dimensions
@@ -127,39 +122,58 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      */
     public GreenPanel()
     {
-        myBoard = new Board();
-        myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
-        setLayout(new BorderLayout());
-        setBackground(COLOR);
-        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
-
-        myPieceToColor = new TreeMap<>();
-
-        myPieceToColor.put("I", UW_PURPLE);
-        myPieceToColor.put("J", UW_PURPLE);
-        myPieceToColor.put("L", UW_PURPLE);
-        myPieceToColor.put("O", UW_PURPLE);
-        myPieceToColor.put("S", UW_PURPLE);
-        myPieceToColor.put("T", UW_PURPLE);
-        myPieceToColor.put("Z", UW_PURPLE);
-
-        try
-        {
-            pixelMplus = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf"));
-            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf")));
-        }
-        catch (final IOException | FontFormatException e)
-        {
-        }
+        setUpComponents();
+        setUpColors();
+        setUpFont();
 
         for (int i = 0; i < PIECE_BLOCKS; i++)
         {
             myGamePieces[i] = new Rectangle2D.Double(0, 0, 0, 0);
         }
+    }
+
+    /**
+     * Sets up specific components in this panel.
+     */
+    private void setUpComponents()
+    {
+        setLayout(new BorderLayout());
+        setBackground(COLOR);
+        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
+    }
+
+    /**
+     * Sets custom font to be used in panel.
+     */
+    private void setUpFont()
+    {
+        try
+        {
+            final String fileName = "PixelMplus12-Bold.ttf";
+            myFont = Font.createFont(Font.TRUETYPE_FONT,
+                    new File(fileName));
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File(fileName)));
+        }
+        catch (final IOException | FontFormatException e)
+        {
+        }
+    }
+
+    /**
+     * Sets all colors of tetris pieces.
+     */
+    private void setUpColors()
+    {
+        myPieceToColor.put("I", Color.CYAN);
+        myPieceToColor.put("J", Color.BLUE);
+        myPieceToColor.put("L", Color.ORANGE);
+        myPieceToColor.put("O", Color.YELLOW);
+        myPieceToColor.put("S", Color.GREEN);
+        myPieceToColor.put("T", UW_PURPLE);
+        myPieceToColor.put("Z", Color.RED);
     }
 
     /**
@@ -213,7 +227,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
                 WIDTH_DIM - BORDER_DRAW_OFFSET, LENGTH_DIM - BORDER_DRAW_OFFSET);
 
         g2d.setPaint(Color.WHITE);
-        g2d.setFont(pixelMplus.deriveFont(20f));
+        g2d.setFont(myFont.deriveFont(20f));
         g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
         if (myTetrisPiece != null)
@@ -222,7 +236,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
             {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
-                g2d.setColor(UW_GOLD);
+                g2d.setColor(Color.WHITE);
                 g2d.setStroke(new BasicStroke(1));
                 g2d.draw(myGamePieces[i]);
             }
