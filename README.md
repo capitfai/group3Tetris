@@ -42,8 +42,8 @@ Resources:
 
 ### Required Line Locations
 
-# Location that determines how many more lines until next level and class that contains scoring algorithm
+*Location that determines how many more lines until next level and class that contains scoring algorithm*
 View class "bluePanel", line 387
 
-# Change in Board class that allows us to set myGameOver to false
+*Change in Board class that allows us to set myGameOver to false*
 Model class "Board", setGameOver() method is changed with property change support to be able to set our instance field in GUI.
