@@ -230,16 +230,6 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int STRING_OFFSET = 5;
 
     /**
-     * Centers longer text.
-     */
-    private static final int DRAW_STRING_OFFSET = 10;
-
-    /**
-     * Text font size.
-     */
-    private static final int TEXT_FONT_SIZE = 10;
-
-    /**
      * Reference of current Board being played on.
      */
     private Board myBoard;
@@ -344,7 +334,7 @@ public class BluePanel extends JPanel implements PropertyChangeListener
         g2d.fillRect(BORDER_OFFSET, BORDER_Y, WIDTH_DIM - TEXT_X,
                 (LENGTH_DIM * PIECE_POINTS) - BORDER_DRAW_OFFSET);
 
-        g2d.setPaint(Color.YELLOW);
+        g2d.setPaint(Color.WHITE);
         g2d.setFont(myFont.deriveFont(20f));
         g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 

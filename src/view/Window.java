@@ -199,21 +199,19 @@ public class Window extends JFrame
         @Override
         public void keyPressed(final KeyEvent theEvent)
         {
+
             if (myPressToStart)
             {
-
-                if (theEvent.getKeyCode() == KeyEvent.VK_1)
+                if (theEvent.getKeyCode() == KeyEvent.VK_1) // start the game
                 {
-
                     myTimer.start();
                     myGameInProgress = true; // game has started, control the pieces
                     myPressToStart = false;
-
                 }
             }
-            else if (theEvent.getKeyCode() == KeyEvent.VK_P)
-            {
 
+            else if (theEvent.getKeyCode() == KeyEvent.VK_P) // pause the game
+            {
                 if (myTimer.isRunning())
                 {
                     myTimer.stop();
@@ -229,86 +227,44 @@ public class Window extends JFrame
                 }
             }
 
-            if (myKeyMap.containsKey(theEvent.getKeyCode()))
+            if (myGameInProgress)
             {
-                myKeyMap.get(theEvent.getKeyCode()).run();
-            }
-            else if (theEvent.getKeyCode() == KeyEvent.VK_2)
-            {
-                myBoard.setGameOver();
-                myGameInProgress = false;
-                myTimer.stop();
+                if (theEvent.getKeyCode() == KeyEvent.VK_A
+                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
+                {
+                    myBoard.left();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_D
+                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
+                {
+                    myBoard.right();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_W
+                        || theEvent.getKeyCode() == KeyEvent.VK_UP)
+                {
+                    myBoard.rotateCW();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_E)
+                {
+                    myBoard.rotateCCW();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_S
+                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
+                {
+                    myBoard.down();
+                }
+                else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
+                {
+                    myBoard.drop();
+                }
+
+                else if (theEvent.getKeyCode() == KeyEvent.VK_2)
+                {
+                    myBoard.setGameOver();
+                    myGameInProgress = false;
+                    myTimer.stop();
+                }
             }
         }
-//        @Override
-//        public void keyPressed(final KeyEvent theEvent)
-//        {
-//
-//            if (myPressToStart)
-//            {
-//                if (theEvent.getKeyCode() == KeyEvent.VK_1) // start the game
-//                {
-//                    myTimer.start();
-//                    myGameInProgress = true; // game has started, control the pieces
-//                    myPressToStart = false;
-//                }
-//            }
-//
-//            else if (theEvent.getKeyCode() == KeyEvent.VK_P) // pause the game
-//            {
-//                if (myTimer.isRunning())
-//                {
-//                    myTimer.stop();
-//                    myGameInProgress = false; // no controlling the piece
-//                }
-//            }
-//            else if (theEvent.getKeyCode() == KeyEvent.VK_U) // unpause the game
-//            {
-//                if (!myTimer.isRunning())
-//                {
-//                    myTimer.start();
-//                    myGameInProgress = true; // can control the piece
-//                }
-//            }
-//
-//            if (myGameInProgress)
-//            {
-//                if (theEvent.getKeyCode() == KeyEvent.VK_A
-//                        || theEvent.getKeyCode() == KeyEvent.VK_LEFT)
-//                {
-//                    myBoard.left();
-//                }
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_D
-//                        || theEvent.getKeyCode() == KeyEvent.VK_RIGHT)
-//                {
-//                    myBoard.right();
-//                }
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_W
-//                        || theEvent.getKeyCode() == KeyEvent.VK_UP)
-//                {
-//                    myBoard.rotateCW();
-//                }
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_E)
-//                {
-//                    myBoard.rotateCCW();
-//                }
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_S
-//                        || theEvent.getKeyCode() == KeyEvent.VK_DOWN)
-//                {
-//                    myBoard.down();
-//                }
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_SPACE)
-//                {
-//                    myBoard.drop();
-//                }
-//
-//                else if (theEvent.getKeyCode() == KeyEvent.VK_2)
-//                {
-//                    myBoard.setGameOver();
-//                    myGameInProgress = false;
-//                    myTimer.stop();
-//                }
-//            }
-//        }
     }
 }
