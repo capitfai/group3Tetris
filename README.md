@@ -42,6 +42,8 @@ Resources:
 
 Code Weirdness: Checkstyle flags most classes for having incorrect import syntax and order regardless of how I try to fix it. Alphabetically and by example code syntax, it should be correct. Magic numbers in the deriveFont method in my custom font, by syntax, has to be done that way and is getting flagged. 
 
+**Last minute submission update: Our group was able to submit 100% working code before the deadline (woohoo!) but ran into git issues that we then stumbled into more code complications with. For our own satisfaction we re-merged for the sake of good-looking, well documented code in hopes that you prefer to see it that way. Alas!!! We understand that a deadline is a deadline and have our original sprint3 > master branch merges previously submitted. Thank you!**
+
 ### Required Line Locations
 
 *Location that determines how many more lines until next level and class that contains scoring algorithm*
