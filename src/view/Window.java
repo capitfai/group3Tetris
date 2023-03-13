@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.security.Key;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import controls.BoardControls;
 
@@ -27,6 +30,11 @@ import controls.BoardControls;
 public class Window extends JFrame
 {
     // FIELDS
+
+    /**
+     * Timer that controls how game functions.
+     */
+    protected static Timer myTimer;
 
     /**
      * This represents the name of the frame.
@@ -88,10 +96,6 @@ public class Window extends JFrame
      */
     private boolean myPressToStart;
 
-    /**
-     * Timer that controls how game functions.
-     */
-    protected static Timer myTimer;
 
     // CONSTRUCTORS
 
@@ -105,10 +109,20 @@ public class Window extends JFrame
         myBoard = theBoard;
         myBoard.newGame();
 
-        myFileMenu = new FileMenu();
-
         myGameInProgress = false;
         myPressToStart = true;
+        setUpComponents();
+        setTimer();
+        addListeners();
+
+        myWindow.addKeyListener(new BoardKeyListener());
+
+    }
+
+    public void setUpComponents()
+    {
+
+        myFileMenu = new FileMenu();
 
         myWindow = new JFrame(NAME);
         myWindow.setLayout(new BorderLayout());
@@ -123,6 +137,13 @@ public class Window extends JFrame
         myWindow.setResizable(false);
         myWindow.setVisible(true);
 
+        myWindow.setFocusable(true);
+        myWindow.requestFocus();
+    }
+
+    public void setTimer()
+    {
+
         myTimer = new Timer(TIMER_DELAY, null);
         myTimer.addActionListener(new ActionListener()
         {
@@ -135,20 +156,21 @@ public class Window extends JFrame
                 }
             }
         });
+    }
+
+    public void addListeners()
+    {
 
         myBoard.addPropertyChangeListener(myRed);
         myBoard.addPropertyChangeListener(myGreen);
         myBoard.addPropertyChangeListener(myBlue);
         myBoard.addPropertyChangeListener(myFileMenu);
 
-        myWindow.addKeyListener(new BoardKeyListener());
-        myWindow.setFocusable(true);
-        myWindow.requestFocus();
-
     }
 
-    class BoardKeyListener extends KeyAdapter
+    private class BoardKeyListener extends KeyAdapter
     {
+
         @Override
         public void keyPressed(final KeyEvent theEvent)
         {

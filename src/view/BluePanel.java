@@ -59,6 +59,11 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int DEFAULT_LINES = 0;
 
     /**
+     * Offsets pixels from text drawn according to width of panel.
+     */
+    private static final int TEXT_OFFSET = 3;
+
+    /**
      * Constant for first level.
      */
     private static final int DEFAULT_LEVEL = 1;
@@ -149,6 +154,11 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int NEXT_LEVEL_Y = 395;
 
     /**
+     * Y-coordinate of lines left until next level.
+     */
+    private static final int LEVEL_LINE_Y = 410;
+
+    /**
      * Base amount of points scored when piece is placed.
      */
     private static final int PIECE_POINTS = 4;
@@ -215,24 +225,9 @@ public class BluePanel extends JPanel implements PropertyChangeListener
     private static final int BORDER_DRAW_OFFSET = 55;
 
     /**
-     * Title font size.
-     */
-    private static final int TITLE_FONT_SIZE = 20;
-
-    /**
      * Centers text.
      */
-    private static final int STRING_OFFSET = 3;
-
-    /**
-     * Centers longer text.
-     */
-    private static final int DRAW_STRING_OFFSET = 7;
-
-    /**
-     * Text font size.
-     */
-    private static final int TEXT_FONT_SIZE = 10;
+    private static final int STRING_OFFSET = 5;
 
     /**
      * Reference of current Board being played on.
@@ -280,13 +275,12 @@ public class BluePanel extends JPanel implements PropertyChangeListener
      */
     public BluePanel()
     {
-        setLayout(new BorderLayout());
-        setBackground(COLOR);
-        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
+
+        setUpComponents();
         myBoard = new Board();
+        setUpFont();
 
         mySize = new ArrayList<>();
-
         myScore = DEFAULT_SCORE;
         myLines = DEFAULT_LINES;
         myLevel = DEFAULT_LEVEL;
@@ -294,13 +288,27 @@ public class BluePanel extends JPanel implements PropertyChangeListener
 
         myDelay = TIMER_DELAY;
 
+    }
+
+    public void setUpComponents()
+    {
+
+        setLayout(new BorderLayout());
+        setBackground(COLOR);
+        setPreferredSize(new Dimension(WIDTH_DIM, LENGTH_DIM));
+
+    }
+
+    public void setUpFont()
+    {
         try
         {
+            final String fileName = "PixelMplus12-Bold.ttf";
             myFont = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf"));
+                    new File(fileName));
             final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf")));
+                    new File(fileName)));
         }
         catch (final IOException | FontFormatException e)
         {
@@ -326,28 +334,34 @@ public class BluePanel extends JPanel implements PropertyChangeListener
         g2d.fillRect(BORDER_OFFSET, BORDER_Y, WIDTH_DIM - TEXT_X,
                 (LENGTH_DIM * PIECE_POINTS) - BORDER_DRAW_OFFSET);
 
-        g2d.setPaint(Color.YELLOW);
+        g2d.setPaint(Color.WHITE);
         g2d.setFont(myFont.deriveFont(20f));
         g2d.drawString("Controls:", TITLE_X, TITLE_Y);
 
         g2d.setPaint(Color.WHITE);
-        g2d.setFont(myFont.deriveFont(10f));
+        g2d.setFont(myFont.deriveFont(13f));
 
-        g2d.drawString("W, w, ^  CW", LENGTH_DIM / 2 - STRING_OFFSET, CW_Y);
-        g2d.drawString("E, e, CCW", LENGTH_DIM / 2, CCW_Y);
-        g2d.drawString("D, d, >, RIGHT", LENGTH_DIM / 2 - DRAW_STRING_OFFSET, RIGHT_Y);
-        g2d.drawString("A, a, <, LEFT ", LENGTH_DIM / 2 - BORDER_OFFSET, LEFT_Y);
-        g2d.drawString("S, s, |, DOWN ", LENGTH_DIM / 2 - BORDER_OFFSET, DOWN_Y);
-        g2d.drawString("Space, DROP ", LENGTH_DIM / 2, DROP_Y);
-        g2d.drawString("P, p, Pause", LENGTH_DIM / 2, PAUSE_Y);
-        g2d.drawString("U, u, Unpause", LENGTH_DIM / 2 - BORDER_OFFSET, UNPAUSE_Y);
-        g2d.drawString("2, End Game", LENGTH_DIM / 2, END_Y);
+        final int tenOffset = 10;
+        final int nineOffset = 9;
+        final int sevenOffset = 7;
+        final int sixOffset = 6;
+        final int fourOffset = 4;
+
+        g2d.drawString("W, w, ^  CW", LENGTH_DIM / 2 - tenOffset, CW_Y);
+        g2d.drawString("E, e, CCW", LENGTH_DIM / 2 - sixOffset, CCW_Y);
+        g2d.drawString("D, d, >, RIGHT", LENGTH_DIM / TEXT_OFFSET - STRING_OFFSET, RIGHT_Y);
+        g2d.drawString("A, a, <, LEFT ", LENGTH_DIM / TEXT_OFFSET - TEXT_OFFSET, LEFT_Y);
+        g2d.drawString("S, s, |, DOWN ", LENGTH_DIM / TEXT_OFFSET - BORDER_OFFSET, DOWN_Y);
+        g2d.drawString("Space, DROP ", LENGTH_DIM / TEXT_OFFSET + TEXT_OFFSET, DROP_Y);
+        g2d.drawString("P, p, Pause", LENGTH_DIM / TEXT_OFFSET, PAUSE_Y);
+        g2d.drawString("U, u, Unpause", LENGTH_DIM / fourOffset + sevenOffset, UNPAUSE_Y);
+        g2d.drawString("2, End Game", LENGTH_DIM / 2 - nineOffset, END_Y);
 
         g2d.drawString("SCORE: " + myScore, LENGTH_DIM / 2, SCORE_Y);
         g2d.drawString("LINES CLEARED: " + myLines, LENGTH_DIM / STRING_OFFSET, LINES_CLEAR);
         g2d.drawString("LEVEL: " + myLevel, LENGTH_DIM / 2, LEVEL_Y);
-        g2d.drawString("NEXT LEVEL IN : " + myNextLevel + " LINES",
-                LENGTH_DIM / BORDER_OFFSET - 2, NEXT_LEVEL_Y);
+        g2d.drawString("NEXT LEVEL IN :", LENGTH_DIM / BORDER_OFFSET + 2, NEXT_LEVEL_Y);
+        g2d.drawString(myNextLevel + " LINES", LENGTH_DIM / 2, LEVEL_LINE_Y);
 
     }
 

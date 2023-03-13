@@ -37,6 +37,16 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
     private static final Color COLOR = Color.WHITE;
 
     /**
+     * Official UW purple to fill the pieces.
+     */
+    private static final Color UW_PURPLE = new Color(51, 0, 111);
+
+    /**
+     * Official UW gold to outline the pieces.
+     */
+    private static final Color UW_GOLD = new Color(232, 211, 162);
+
+    /**
      * This represents the width of the panel.
      */
     private static final int WIDTH_DIM = 150;
@@ -55,11 +65,6 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
      * Sets frame values.
      */
     private static final int SET_FRAME = 25;
-
-    /**
-     * Contains value of header font size.
-     */
-    private static final int HEADER_SIZE = 20;
 
     /**
      * X-coordinate of text.
@@ -131,13 +136,13 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
 
         myPieceToColor = new TreeMap<>();
 
-        myPieceToColor.put("I", Color.CYAN);
-        myPieceToColor.put("J", Color.BLUE);
-        myPieceToColor.put("L", Color.ORANGE);
-        myPieceToColor.put("O", Color.YELLOW);
-        myPieceToColor.put("S", Color.GREEN);
-        myPieceToColor.put("T", Color.PINK);
-        myPieceToColor.put("Z", Color.RED);
+        myPieceToColor.put("I", UW_PURPLE);
+        myPieceToColor.put("J", UW_PURPLE);
+        myPieceToColor.put("L", UW_PURPLE);
+        myPieceToColor.put("O", UW_PURPLE);
+        myPieceToColor.put("S", UW_PURPLE);
+        myPieceToColor.put("T", UW_PURPLE);
+        myPieceToColor.put("Z", UW_PURPLE);
 
         try
         {
@@ -207,7 +212,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
         g2d.fillRect(BORDER_OFFSET, BORDER_OFFSET,
                 WIDTH_DIM - BORDER_DRAW_OFFSET, LENGTH_DIM - BORDER_DRAW_OFFSET);
 
-        g2d.setPaint(Color.BLUE);
+        g2d.setPaint(Color.WHITE);
         g2d.setFont(pixelMplus.deriveFont(20f));
         g2d.drawString("Next Piece!", TEXT_X, TEXT_Y);
 
@@ -217,7 +222,7 @@ public class GreenPanel extends JPanel implements PropertyChangeListener
             {
                 g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                 g2d.fill(myGamePieces[i]);
-                g2d.setColor(Color.WHITE);
+                g2d.setColor(UW_GOLD);
                 g2d.setStroke(new BasicStroke(1));
                 g2d.draw(myGamePieces[i]);
             }

@@ -41,6 +41,16 @@ public class RedPanel extends JPanel implements PropertyChangeListener
     private static final Color COLOR = Color.BLACK;
 
     /**
+     * Official UW purple to fill the pieces.
+     */
+    private static final Color UW_PURPLE = new Color(51, 0, 111);
+
+    /**
+     * Official UW gold to outline the pieces.
+     */
+    private static final Color UW_GOLD = new Color(232, 211, 162);
+
+    /**
      * X-coordinate for text placement.
      */
     private static final int TEXT_X = 50;
@@ -109,6 +119,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
      * Y-coordinate of ninth instruction line.
      */
     private static final int NINTH_LINE_Y = 435;
+
 
     /**
      * This object represents a board object from package model.
@@ -189,13 +200,13 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         {
             myFrozenBlocks.add(new Block[myBoard.getWidth()]);
         }
-        myPieceToColor.put("I", Color.CYAN);
-        myPieceToColor.put("J", Color.BLUE);
-        myPieceToColor.put("L", Color.ORANGE);
-        myPieceToColor.put("O", Color.YELLOW);
-        myPieceToColor.put("S", Color.GREEN);
-        myPieceToColor.put("T", Color.PINK);
-        myPieceToColor.put("Z", Color.RED);
+        myPieceToColor.put("I", UW_PURPLE);
+        myPieceToColor.put("J", UW_PURPLE);
+        myPieceToColor.put("L", UW_PURPLE);
+        myPieceToColor.put("O", UW_PURPLE);
+        myPieceToColor.put("S", UW_PURPLE);
+        myPieceToColor.put("T", UW_PURPLE);
+        myPieceToColor.put("Z", UW_PURPLE);
     }
 
     /**
@@ -222,7 +233,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
             final int textXOffset = 6; // offsets text to be centered
             final int scoringX = 3; // offsets scoring guide text to be centered
 
-            g2d.setPaint(Color.RED);
+            g2d.setPaint(UW_PURPLE);
             g2d.setFont(myFont.deriveFont(35f));
             g2d.drawString("T E T R I S", (myBoard.getWidth() * TEXT_SIZING)
                             / gameTitleSpacing, (myBoard.getHeight() * TEXT_SIZING)
@@ -275,7 +286,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                             g2d.setColor(myPieceToColor.get(blockRow[j].name()));
                             g2d.fillRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
                                     BOARD_OFFSET, BOARD_OFFSET);
-                            g2d.setColor(Color.WHITE);
+                            g2d.setColor(UW_GOLD);
                             g2d.setStroke(new BasicStroke(1));
                             g2d.drawRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
                                     BOARD_OFFSET, BOARD_OFFSET);
@@ -290,7 +301,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                     {
                         g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                         g2d.fill(myGamePieces[i]);
-                        g2d.setColor(Color.WHITE);
+                        g2d.setColor(UW_GOLD);
                         g2d.setStroke(new BasicStroke(1));
                         g2d.draw(myGamePieces[i]);
                     }
