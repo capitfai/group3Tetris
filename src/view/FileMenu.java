@@ -28,7 +28,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener
      * The text message that appears when the button "About" is called.
      */
     private static final String TEXT_ABOUT_MSG = "Winter 2023: By Avreen, Faith, "
-                                                + "Josh and Sullivan\nFont imported from public site:"
+            + "Josh and Sullivan\nFont imported from public site:"
             + "\nhttps://itouhiro.hatenablog.com/entry/20130602/font";
 
     /**
@@ -79,7 +79,7 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener
     /**
      * This represents the Tetris game board.
      */
-    private Board myBoard;
+    private Board myBoard = new Board();
 
     /**
      * This constructor constructs the file menu bar.
@@ -89,7 +89,6 @@ public class FileMenu extends JMenuBar implements PropertyChangeListener
         super();
         buildComponents();
         addEvents();
-        myBoard = new Board();
         myGameState = false;
     }
 

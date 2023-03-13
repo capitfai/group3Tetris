@@ -46,11 +46,6 @@ public class RedPanel extends JPanel implements PropertyChangeListener
     private static final Color UW_PURPLE = new Color(51, 0, 111);
 
     /**
-     * Official UW gold to outline the pieces.
-     */
-    private static final Color UW_GOLD = new Color(232, 211, 162);
-
-    /**
      * X-coordinate for text placement.
      */
     private static final int TEXT_X = 50;
@@ -120,26 +115,30 @@ public class RedPanel extends JPanel implements PropertyChangeListener
      */
     private static final int NINTH_LINE_Y = 435;
 
+    /**
+     * The name of the file for the Font name.
+     */
+    private static final String MY_FILE_NAME = "PixelMplus12-Bold.ttf";
 
     /**
      * This object represents a board object from package model.
      */
-    private final Board myBoard;
+    private final Board myBoard = new Board();
 
     /**
      * Contains specific piece and color they will represent.
      */
-    private final Map<String, Color> myPieceToColor;
+    private final Map<String, Color> myPieceToColor = new TreeMap<>();
 
     /**
      * List that holds all the compounded frozen blocks.
      */
-    private List<Block[]> myFrozenBlocks;
+    private List<Block[]> myFrozenBlocks = new LinkedList<>();
 
     /**
      * Contains all tetris pieces.
      */
-    private final Rectangle2D[] myGamePieces;
+    private final Rectangle2D[] myGamePieces = new Rectangle2D[PIECE_BLOCKS];
 
     /**
      * Variable tells whether game is over.
@@ -167,29 +166,10 @@ public class RedPanel extends JPanel implements PropertyChangeListener
      */
     public RedPanel()
     {
-        myBoard = new Board();
-        setLayout(new BorderLayout());
-        setBackground(COLOR);
-        setPreferredSize(new Dimension(myBoard.getWidth() * BOARD_OFFSET,
-                myBoard.getHeight() * BOARD_OFFSET));
-        myGamePieces = new Rectangle2D[PIECE_BLOCKS];
-        myPieceToColor = new TreeMap<>();
-        myFrozenBlocks = new LinkedList<Block[]>();
 
-        myGameOver = false;
-        myPressToStart = true;
-
-        try
-        {
-            myFont = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf"));
-            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("PixelMplus12-Bold.ttf")));
-        }
-        catch (final IOException | FontFormatException e)
-        {
-        }
+        setUpComponents();
+        setUpColors();
+        setUpFont();
 
         for (int i = 0; i < PIECE_BLOCKS; i++)
         {
@@ -200,13 +180,52 @@ public class RedPanel extends JPanel implements PropertyChangeListener
         {
             myFrozenBlocks.add(new Block[myBoard.getWidth()]);
         }
-        myPieceToColor.put("I", UW_PURPLE);
-        myPieceToColor.put("J", UW_PURPLE);
-        myPieceToColor.put("L", UW_PURPLE);
-        myPieceToColor.put("O", UW_PURPLE);
-        myPieceToColor.put("S", UW_PURPLE);
+    }
+
+    /**
+     * Sets up all components within the panel, its layout, its background
+     * color, size and initializes game variables.
+     */
+    private void setUpComponents()
+    {
+        setLayout(new BorderLayout());
+        setBackground(COLOR);
+        setPreferredSize(new Dimension(myBoard.getWidth() * BOARD_OFFSET,
+                myBoard.getHeight() * BOARD_OFFSET));
+        myGameOver = false;
+        myPressToStart = true;
+    }
+
+    /**
+     * Sets up all colors to each piece.
+     */
+    private void setUpColors()
+    {
+        myPieceToColor.put("I", Color.CYAN);
+        myPieceToColor.put("J", Color.BLUE);
+        myPieceToColor.put("L", Color.ORANGE);
+        myPieceToColor.put("O", Color.YELLOW);
+        myPieceToColor.put("S", Color.GREEN);
         myPieceToColor.put("T", UW_PURPLE);
-        myPieceToColor.put("Z", UW_PURPLE);
+        myPieceToColor.put("Z", Color.RED);
+    }
+
+    /**
+     * Finds and sets custom font used to display game text.
+     */
+    private void setUpFont()
+    {
+        try
+        {
+            myFont = Font.createFont(Font.TRUETYPE_FONT,
+                    new File(MY_FILE_NAME));
+            final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File(MY_FILE_NAME)));
+        }
+        catch (final IOException | FontFormatException e)
+        {
+        }
     }
 
     /**
@@ -245,7 +264,8 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                     / textXOffset, SUBHEADING_Y);
 
             g2d.setFont(myFont.deriveFont(13f));
-            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * TEXT_SIZING) / scoringX, FIRST_LINE_Y);
+            g2d.drawString("SCORING GUIDE:", (myBoard.getWidth() * TEXT_SIZING)
+                    / scoringX, FIRST_LINE_Y);
             g2d.drawString("+4 points when a piece", TEXT_X, SECOND_LINE_Y);
             g2d.drawString("freezes in place.", TEXT_X, THIRD_LINE_Y);
             g2d.drawString("+1 level (n) each 5 lines ", TEXT_X, FOURTH_LINE_Y);
@@ -286,7 +306,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                             g2d.setColor(myPieceToColor.get(blockRow[j].name()));
                             g2d.fillRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
                                     BOARD_OFFSET, BOARD_OFFSET);
-                            g2d.setColor(UW_GOLD);
+                            g2d.setColor(Color.WHITE);
                             g2d.setStroke(new BasicStroke(1));
                             g2d.drawRect(j * BOARD_OFFSET, (-i + transpose) * BOARD_OFFSET,
                                     BOARD_OFFSET, BOARD_OFFSET);
@@ -301,7 +321,7 @@ public class RedPanel extends JPanel implements PropertyChangeListener
                     {
                         g2d.setColor(myPieceToColor.get(myTetrisPiece.name()));
                         g2d.fill(myGamePieces[i]);
-                        g2d.setColor(UW_GOLD);
+                        g2d.setColor(Color.WHITE);
                         g2d.setStroke(new BasicStroke(1));
                         g2d.draw(myGamePieces[i]);
                     }
